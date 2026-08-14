@@ -1,249 +1,281 @@
 # B4-2: 버튼 누르면 화면이 스르륵 바뀌는 요즘 웹사이트 만들기
 
-> **배포 URL**: https://b4-2.vercel.app/
-> **GitHub**: https://github.com/giyeop-cody/B4-2
+> **배포 URL**: <https://b4-2.vercel.app/#/items>
+>
+> **GitHub**: <https://github.com/giyeop-cody/B4-2>
 
-> React 18 + React Router 6 (HashRouter) + Supabase(LocalStorage fallback) 기반 CRUD 웹앱
+React 18, React Router 7, Supabase로 만든 아이템 CRUD SPA다. LocalStorage는 자동 대체가 아니라 인터넷 없는 **로컬 학습 모드**에서만 명시적으로 사용할 수 있다.
 
-## 📌 과제 정보
+## 과제 정보
 
 | 항목 | 내용 |
-|------|------|
-| **과목** | 웹 기초와 프론트엔드 |
-| **난이도** | ★★☆ (Lv.2) |
-| **학습 시간** | 80분 |
-| **필수 여부** | 🔵 선택 |
-| **과제 번호** | 185011 |
+|---|---|
+| 분야 | AI/SW 기초 |
+| 구분 | 웹 기초와 프론트엔드 |
+| 학습 시간 | 80시간 |
+| 핵심 데이터 | 학습 아이템 |
+| 백엔드 | Supabase |
+| 배포 | Vercel |
 
+## 구현 결과
 
-## 🎯 프로젝트 개요
+- 라우트 8개와 Not Found
+- 원격 Supabase 기준 목록·상세·등록·수정·삭제
+- controlled form, 필수값 검증, 오류, 제출 중 상태
+- 공통 로딩·오류·빈 상태 UI
+- 페이지 7개, 재사용 컴포넌트 11개, 커스텀 훅 3개
+- 전역 사용자 상태(Context)
+- `useMemo`, `useCallback`, `React.memo` 성능 학습
+- Supabase 이메일 인증과 `/profile` 보호 라우트
+- Vitest/Testing Library 테스트 20개
+- Playwright 브라우저 흐름 테스트 2개
+- 실제 Supabase CRUD 실증 검사 스크립트
 
-B4-1에서 순수 HTML/CSS/JavaScript로 "이벤트 → 상태 → 렌더링" 흐름을 배웠다면, 이번에는 React 프레임워크로 그 흐름을 구조화합니다. 컴포넌트 분리, 상태 관리, 라우팅, 비동기 데이터 처리까지 React로 만드는 CRUD 웹앱의 전체 사이클을 경험합니다.
+## 기술 스택
 
-## 🎓 학습 목표
+- React 18.3
+- React Router 7.18 (`HashRouter`)
+- Supabase JavaScript SDK 2
+- Vite 6
+- Vitest, React Testing Library, Playwright
+- JavaScript와 순수 CSS/inline style
 
-이 과제를 완료한 뒤, 다음을 설명할 수 있어야 한다:
+## 실행 방법
 
-1. React 컴포넌트 구조 — 페이지/컴포넌트/훅을 분리하여 설계
-2. 상태 관리 — useState/useEffect로 데이터 로드 → 화면 반영 흐름
-3. 라우팅 — React Router로 페이지 간 이동 (최소 5개 라우트)
-4. 비동기 렌더링 — 로딩/에러/빈 데이터 상태를 일관되게 처리
-5. 데이터 흐름 — 이벤트 → 상태 변경 → API 호출 → 렌더링 전체 사이클
-6. BaaS 연동 — Supabase 또는 Firebase로 백엔드 없이 데이터 CRUD
+### 1. 설치
 
-## ⚠️ 제약 사항
+Node.js 20 이상에서 실행한다.
 
-- React 기반으로 구현 (다른 프레임워크 금지)
-- Supabase 또는 Firebase 사용
-- 백엔드 서버를 직접 구현하지 않음
-- API Key 등 민감 정보는 .env 파일에 저장, .gitignore에 .env 포함
-- 최소 5개 라우트 + 404 페이지
-- 최소 8개 재사용 컴포넌트 + 1개 이상 커스텀 훅
-
----
-
-## 🚀 실행 방법
-
-### 로컬 실행 (Supabase 없이 LocalStorage fallback)
 ```bash
-npm install
-npm run dev
-```
-> .env 없이도 LocalStorage 기반으로 CRUD가 동작합니다.
-
-### Supabase 연결 시
-```bash
-cp .env.example .env
-# .env에 Supabase URL과 Key 입력
-npm run dev
+npm ci
 ```
 
-### 배포 (Vercel)
+### 2. Supabase 원격 모드
+
 ```bash
+cp .env.example .env.local
+```
+
+`.env.local`의 값을 실제 프로젝트 공개 설정으로 바꾼다.
+
+```dotenv
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-publishable-or-anon-key
+VITE_ALLOW_LOCAL_DB=false
+```
+
+```bash
+npm run dev
+```
+
+### 3. LocalStorage 학습 모드
+
+Supabase 없이 UI 흐름만 연습할 때 `.env.local`을 다음 **한 줄만** 작성한다.
+
+```dotenv
+VITE_ALLOW_LOCAL_DB=true
+```
+
+```bash
+npm run dev
+```
+
+헤더의 `Supabase 원격`, `LocalStorage 학습`, `데이터 설정 필요` 배지로 현재 저장 위치를 확인할 수 있다. 배포에서는 로컬 학습 모드를 켜면 안 된다.
+
+## 검사 명령
+
+```bash
+# 단위/컴포넌트 테스트 20개
+npm test
+
+# 브라우저 테스트 2개
+npx playwright install chromium
+npx playwright install-deps chromium  # Linux에서 필요한 경우
+npm run test:e2e
+
+# 제품 빌드와 의존성 보안
 npm run build
-# dist/ 폴더 배포
-# Vercel 대시보드에서 Environment Variables 등록:
-#   VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY
+npm audit --omit=dev
 ```
 
-> **HashRouter 사용**: 정적 호스팅(Vercel, GitHub Pages)에서 클라이언트 사이드 라우팅이 100% 동작하도록 HashRouter를 사용합니다. URL이 `/#/items` 형태가 됩니다.
+원격 CRUD 검사는 환경변수를 전달한 환경에서 실행한다. 검사 행은 끝에 삭제된다.
 
----
-
-## 🏗️ 프로젝트 구조
-
+```bash
+npm run verify:remote
 ```
+
+## 라우트
+
+HashRouter를 사용하므로 배포 주소의 경로는 `/#/...` 뒤에 표시된다.
+
+| # | 라우트 | 화면/기능 |
+|---:|---|---|
+| 1 | `/` | 목록(index) |
+| 2 | `/items` | 목록, 카테고리 필터, 삭제 |
+| 3 | `/items/new` | 등록 폼 |
+| 4 | `/items/:id` | 상세, 삭제 |
+| 5 | `/items/:id/edit` | 수정 폼 |
+| 6 | `/login` | Supabase 로그인/회원가입 |
+| 7 | `/profile` | 로그인 사용자 보호 화면 |
+| 8 | `*` | 404 Not Found |
+
+`https://b4-2.vercel.app/items`가 아니라 `https://b4-2.vercel.app/#/items`가 정식 목록 주소다. HashRouter는 새로고침 서버 설정이 단순하지만 URL에 `#`이 생기는 단점이 있다.
+
+## 프로젝트 구조
+
+```text
 src/
-├── pages/                      ← 라우트 단위 페이지 (5개)
-│   ├── ItemListPage.jsx            (/items — 목록 조회 + 삭제)
-│   ├── ItemDetailPage.jsx          (/items/:id — 상세 조회 + 삭제)
-│   ├── ItemNewPage.jsx             (/items/new — 등록)
-│   ├── ItemEditPage.jsx            (/items/:id/edit — 수정)
-│   └── NotFoundPage.jsx            (/* — 404 Not Found)
-├── components/                 ← 재사용 컴포넌트 (8개)
-│   ├── Layout.jsx                  (1. 공통 레이아웃 — 헤더/내용/푸터 통합)
-│   ├── LoadingSpinner.jsx          (2. 로딩 공통 UI)
-│   ├── ErrorBanner.jsx             (3. 에러 공통 UI)
-│   ├── EmptyState.jsx              (4. 빈 데이터 공통 UI)
-│   ├── StateView.jsx               (5. 상태 뷰 통합 컴포넌트)
-│   ├── ItemCard.jsx                (6. 개별 아이템 카드)
-│   ├── ItemForm.jsx                (7. 등록/수정 공용 폼 — 검증 포함)
-│   └── ConfirmDialog.jsx           (8. 삭제 확인 모달)
-├── hooks/                      ← 커스텀 훅 (2개)
-│   ├── useItems.js                 (목록 조회/추가/삭제)
-│   └── useItem.js                  (단일 조회/수정)
-├── lib/                        ← 설정/유틸 (3개)
-│   ├── supabaseClient.js           (Supabase 클라이언트)
-│   ├── localDB.js                  (LocalStorage fallback)
-│   └── api.js                      (데이터 소스 추상화)
-├── App.jsx                     ← 라우팅 정의 (HashRouter, 6개 라우트)
-├── main.jsx                    ← 진입점
-└── index.css                   ← 전역 스타일
+├── pages/                 # URL 단위 화면 7개
+│   ├── ItemListPage.jsx
+│   ├── ItemDetailPage.jsx
+│   ├── ItemNewPage.jsx
+│   ├── ItemEditPage.jsx
+│   ├── LoginPage.jsx
+│   ├── ProfilePage.jsx
+│   └── NotFoundPage.jsx
+├── components/            # 재사용 UI 11개
+│   ├── Layout.jsx
+│   ├── StateView.jsx
+│   ├── LoadingSpinner.jsx
+│   ├── ErrorBanner.jsx
+│   ├── EmptyState.jsx
+│   ├── ItemCard.jsx
+│   ├── ItemForm.jsx
+│   ├── ConfirmDialog.jsx
+│   ├── DataSourceBadge.jsx
+│   ├── CategoryFilter.jsx
+│   └── ProtectedRoute.jsx
+├── hooks/                 # 화면에서 분리한 React 로직 3개
+│   ├── useItems.js
+│   ├── useItem.js
+│   └── useAuth.js
+├── context/
+│   └── AuthContext.jsx    # 로그인 사용자 전역 상태
+├── lib/                   # 데이터와 외부 서비스
+│   ├── api.js
+│   ├── dataSource.js
+│   ├── localDB.js
+│   └── supabaseClient.js
+├── test/setup.js
+├── App.jsx
+└── main.jsx
+
+e2e/                      # Playwright 브라우저 테스트
+scripts/                  # 실제 Supabase CRUD 검사
 ```
 
-### 폴더 분리 이유 (항목 2-2)
-- **pages/**: 라우트 단위 — 각 파일이 하나의 URL에 대응
-- **components/**: 재사용 단위 — 여러 페이지에서 공유하는 UI 조각
-- **hooks/**: 로직 단위 — 데이터 처리 로직을 UI에서 분리
-- **lib/**: 설정 단위 — 외부 서비스 클라이언트 및 유틸
+### 폴더를 나눈 기준
 
-### 컴포넌트 분리 기준 (항목 2-3)
-| 컴포넌트 | 분리 기준 |
-|----------|-----------|
-| Layout | 모든 페이지 공통 레이아웃 (헤더+내용+푸터) → 중복 제거 |
-| LoadingSpinner | 로딩 상태 → 모든 페이지에서 일관된 UX (항목 2-4) |
-| ErrorBanner | 에러 상태 → 모든 페이지에서 일관된 UX (항목 2-4) |
-| EmptyState | 빈 데이터 → 모든 페이지에서 일관된 UX (항목 2-4) |
-| StateView | 로딩/에러/빈/정상 4분기 통합 → 상태 분기 중복 제거 |
-| ItemCard | 목록에서 반복 렌더링 → 단일 책임 (1개 아이템 표시) |
-| ItemForm | 등록/수정에서 동일한 폼 → 코드 중복 제거 + 검증 포함 |
-| ConfirmDialog | 삭제 전 확인 → 재사용 가능한 모달 패턴 |
+- `pages`: 하나의 URL에 대응한다.
+- `components`: 여러 화면에서 다시 쓰거나 한 가지 UI 책임을 가진다.
+- `hooks`: 조회·변경·인증처럼 상태를 다루는 React 로직이다.
+- `context`: 멀리 떨어진 컴포넌트도 함께 쓰는 로그인 사용자 상태다.
+- `lib`: Supabase, LocalStorage처럼 React 화면과 무관한 데이터 코드다.
 
----
+## 상태와 데이터 흐름
 
-## 🗺️ 라우트 (6개, 항목 1-1)
+### props와 state
 
-| # | 라우트 | 페이지 | 기능 |
-|---|--------|--------|------|
-| 1 | `/` | ItemListPage | 목록 (index 라우트) |
-| 2 | `/items` | ItemListPage | 목록 조회 (R) |
-| 3 | `/items/new` | ItemNewPage | 등록 (C) |
-| 4 | `/items/:id` | ItemDetailPage | 상세 조회 (R) |
-| 5 | `/items/:id/edit` | ItemEditPage | 수정 (U) |
-| 6 | `*` | NotFoundPage | 404 Not Found |
+- **props**: 부모가 자식에게 내려주는 읽기 전용 값이다. `ItemCard`의 `item`, `onDelete`가 예다.
+- **state**: 컴포넌트가 기억하고 변경하는 값이다. 폼의 `title`, 목록의 `items`, 삭제창의 `confirmId`가 예다.
 
-> 삭제(D)는 목록 페이지와 상세 페이지에서 ConfirmDialog를 통해 수행
+| 상태 | 소유 위치 | 이유 |
+|---|---|---|
+| 목록, 조회 로딩/오류 | `useItems` | 목록 데이터 요청을 한곳에서 관리 |
+| 상세, 조회 로딩/오류 | `useItem` | 상세와 수정이 같은 로직 사용 |
+| 폼 입력 | `ItemForm` | 폼 안에서만 즉시 필요 |
+| 제출/삭제 중 | 각 페이지 | 해당 사용자 행동을 페이지가 조정 |
+| 로그인 사용자 | `AuthContext` | 헤더·로그인·프로필·보호 라우트가 공유 |
 
----
+자식 폼은 입력 결과를 `onSubmit` callback으로 부모에게 올리고, 부모는 저장 결과를 다시 props와 라우팅으로 화면에 반영한다.
 
-## 🧩 커스텀 훅 분리 이유 (항목 2-1, 2-5)
+### useEffect
 
-### useItems() — 목록 조회/추가/삭제
-1. **재사용성**: 목록 페이지와 삭제 후 갱신 등 여러 곳에서 동일 데이터 로직 필요
-2. **관심사 분리**: UI(컴포넌트)와 데이터 로직(훅) 분리 → 컴포넌트는 렌더링에 집중
-3. **테스트 용이성**: 데이터 로직만 독립적으로 테스트 가능
-4. **상태 관리 일원화**: loading/error/data 상태를 한 곳에서 관리
+`useItems`는 컴포넌트가 처음 나타날 때 `useEffect`로 목록을 요청한다. 의존성 배열의 `fetchItems` 참조가 바뀔 때 다시 실행된다. `fetchItems`는 `useCallback`으로 참조를 고정해 이유 없는 반복 요청을 막는다. `useItem`은 URL의 `id`가 바뀌면 새 상세 데이터를 요청한다.
 
-### useItem() — 단일 조회/수정
-- 상세 페이지와 수정 페이지에서 공통으로 사용하는 단일 아이템 로직
+### 공통 비동기 상태
 
----
+`StateView`의 판단 순서는 다음과 같다.
 
-## 🔄 상태 처리 패턴 (항목 1-3, 2-4, 3-3)
+1. `loading` → `LoadingSpinner`
+2. `error` → `ErrorBanner`
+3. 데이터 없음 → `EmptyState`
+4. 데이터 있음 → 실제 자식 화면
 
-모든 페이지에서 `StateView` 공통 컴포넌트를 통해 일관된 상태 처리:
+조회 상태와 CRUD 변경 상태를 분리했다. 수정 중에는 폼을 없애지 않고 버튼에 `저장 중…`을 표시하며, 실패하면 폼 안에 오류가 남는다.
 
-```jsx
-<StateView loading={loading} error={error} data={data} onRetry={refetch}>
-  {(data) => <ItemList data={data} />}
-</StateView>
-```
+## 상태 변경 → 화면 변경 예시
 
-| 상태 | 컴포넌트 | 표시 |
-|------|----------|------|
-| 로딩 | LoadingSpinner | 스피너 + "불러오는 중…" |
-| 에러 | ErrorBanner | ⚠️ + 에러 메시지 + 다시 시도 버튼 |
-| 빈 데이터 | EmptyState | 📭 + "표시할 데이터가 없습니다." |
-| 정상 | children | 실제 콘텐츠 |
+1. 카테고리 선택 → `category` 변경 → `useMemo` 필터 결과와 카드 목록 변경
+2. 폼 입력 → `title/content` 변경 → controlled input 값과 검증 메시지 변경
+3. 삭제 확인 → `deleting` 변경 → 대화상자 버튼이 `삭제 중…`으로 바뀌고 잠김
+4. 로그인/로그아웃 → Context의 `user` 변경 → 헤더 링크와 보호 라우트 변경
+5. 원격 삭제 성공 → `items` 배열에서 제거 → 카드가 화면에서 사라짐
 
----
+## Supabase 선택과 설정
 
-## 🛡️ 보안
+### 선택 이유
 
-- `.env` 파일에 API Key 저장
-- `.gitignore`에 `.env` 포함
-- GitHub에 API Key 푸시하지 않음
-- 배포 시 Vercel 대시보드에서 Environment Variables 별도 등록
+- PostgreSQL 기반이라 표 구조와 SQL을 배울 수 있다.
+- JavaScript SDK로 React에서 직접 비동기 요청을 연습할 수 있다.
+- Firebase보다 관계형 표 구조가 익숙하다고 판단했다.
 
----
-
-## 📖 평가 답변 준비: props vs state (항목 3-1)
-
-### 개념 구분
-
-| 개념 | 정의 | 변경 가능성 | 본 프로젝트 예시 |
-|------|------|-------------|------------------|
-| **props** | 부모 → 자식으로 전달하는 데이터 | 읽기 전용 (자식이 변경 불가) | `<ItemCard item={item} onDelete={setConfirmId} />` — item, onDelete는 부모가 전달한 props |
-| **state** | 컴포넌트 내부에서 관리하는 데이터 | 변경 가능 (setState로 변경) | `useItems()` 내부의 `items`, `loading`, `error` — 훅이 직접 관리 |
-
-### 상태 소유 위치 (데이터 흐름 규칙)
-
-| 상태 종류 | 소유 위치 | 이유 |
-|-----------|-----------|------|
-| 목록 데이터 (items) | `useItems` 훅 | 여러 페이지에서 공유 + 데이터 로직 집중 |
-| 단일 아이템 (item) | `useItem` 훅 | 상세/수정 페이지에서 공유 |
-| 폼 입력값 (title, content) | `ItemForm` 컴포넌트 | 해당 컴포넌트 내부에서만 사용 |
-| 삭제 확인 (confirmId) | `ItemListPage` / `ItemDetailPage` | 해당 페이지에서만 사용 |
-| 제출 중 (submitting) | 각 페이지 컴포넌트 | 페이지별 독립 관리 |
-
-### 데이터 흐름 방향
-
-```
-부모 (page)                자식 (component)
-  │                          │
-  │ ──── props (하향) ────→ │  item, onSubmit, submitting
-  │                          │
-  │ ←── callback (상향) ──── │  onSubmit(), onDelete()
-  │                          │
-  state는 훅 또는 컴포넌트 내부에서 관리
-```
-
----
-
-## 📖 평가 답변 준비: Supabase 선택 이유 + 연동 (항목 4-2)
-
-### Supabase를 선택한 이유
-
-1. **PostgreSQL 기반**: SQL 지식을 그대로 재사용 가능. Firebase의 전용 쿼리 문법을 새로 배울 필요 없음
-2. **오픈소스**: 자체 호스팅 가능하여 벤더 종속 위험 적음
-3. **관계형 데이터**: items 테이블에 id, title, content, category, created_at 구조가 RDB에 적합
-4. **JavaScript SDK**: `@supabase/supabase-js` 한 패키지로 모든 기능 제공
-
-### 연동 시 겪은 어려움과 해결
-
-| 문제 | 해결 |
-|------|------|
-| 평가 환경에서 .env 없으면 앱 크래시 | `isSupabaseConfigured` 플래그로 LocalStorage fallback 자동 전환 |
-| Supabase와 LocalDB 인터페이스 불일치 | `lib/api.js`에서 추상화 — `{ data, error }` 구조를 통일된 인터페이스로 래핑 |
-| 환경 변수 노출 위험 | `VITE_` 접두어 + `.gitignore` + 배포 시 대시보드 별도 등록 |
-| RLS(Row Level Security) 설정 | 과제에서 "고급 기능은 필수 아님" → 기본 정책만 설정 |
-
-### 인증 사용 여부
-
-본 프로젝트에서는 **인증을 사용하지 않음**. 과제 요구사항이 CRUD + 라우팅 + 상태 관리에 집중되어 있고, "백엔드 고급 기능(권한/RLS/Rules)은 필수가 아님"으로 명시되어 있기 때문.
-
-### Supabase 설정 방법
+### 최소 테이블 예시
 
 ```sql
-CREATE TABLE items (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  title TEXT NOT NULL,
-  content TEXT NOT NULL,
-  category TEXT DEFAULT '일반',
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ
+create table public.items (
+  id uuid default gen_random_uuid() primary key,
+  title text not null,
+  content text not null,
+  category text default '일반',
+  created_at timestamptz default now()
 );
-
-ALTER TABLE items ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Allow all" ON items FOR ALL USING (true);
 ```
+
+현재 과제 배포는 로그인 없이 필수 CRUD를 시연할 수 있는 공개 데모 정책을 사용한다. 운영 서비스에는 적합하지 않으며 사용자별 권한 RLS를 별도로 설계해야 한다.
+
+### 연동 중 배운 점
+
+- 환경변수가 없을 때 LocalStorage로 자동 성공시키면 원격 설정 실패를 숨긴다.
+- 조회용 `loading/error`와 저장·삭제용 상태를 나눠야 폼이 사라지지 않는다.
+- 없는 상세는 `.maybeSingle()`, 반드시 한 행이 필요한 생성은 `.single()`이 알맞다.
+- 새 Supabase 공개 키는 예전 JWT뿐 아니라 `sb_publishable_...` 형식도 있다.
+
+## 인증 보너스의 범위
+
+Supabase 이메일 로그인/가입과 전역 사용자 Context를 구현했다. `/profile`은 보호 라우트다. 2026-08-14 공개 Auth 설정 검사에서 이메일 제공자와 회원가입이 활성화됐고, 가입 뒤 이메일 확인이 필요한 상태임을 확인했다.
+
+프론트엔드 보호 라우트는 주소의 화면을 가리는 기능이다. 데이터 자체를 보호하려면 사용자와 연결된 RLS가 추가로 필요하다.
+
+## 성능 보너스의 범위
+
+- `useMemo`: 필터 결과와 카테고리 개수
+- `React.memo`: 같은 props의 `ItemCard`
+- `useCallback`: 카드에 전달하는 삭제 함수 참조
+
+작은 목록에서는 메모 확인 비용이 더 클 수 있다. 실제 서비스에서는 React Profiler로 측정한 뒤 적용해야 한다.
+
+## 배포
+
+Vercel 프로젝트에 다음 환경변수를 등록한다.
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+- `VITE_ALLOW_LOCAL_DB=false`
+
+그 뒤 main 브랜치를 배포하고 `/#/items`에서 목록·상세·등록·수정·삭제를 다시 검사한다.
+
+## 보안
+
+- `.env`, `.env.*`는 Git에서 제외하고 `.env.example`만 허용한다.
+- 토큰, 세션 ID, 실제 Supabase 설정값을 코드·문서·커밋에 넣지 않는다.
+- `npm audit --omit=dev` 결과: 취약점 0개(2026-08-14 검사).
+- 공개된 GitHub 토큰과 웹 세션은 즉시 폐기·재발급해야 한다.
+
+## 학습·이슈·평가 기록
+
+- [LEARNING.md](LEARNING.md): 기초 학습과 과거 진행 기록
+- [실증 검사](docs/audit/2026-08-14-requirements-audit.md)
+- [이슈 목록](docs/issues/README.md)
+- [멘토·학습 동료 페르소나 검토](docs/mentoring/2026-08-14-first-review.md)
+- `eval/`: 사전평가와 동료평가 준비/결과
