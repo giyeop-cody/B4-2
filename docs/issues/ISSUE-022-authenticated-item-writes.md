@@ -105,8 +105,8 @@ learning의 `eval/` 경로를 merge 전 상태로 복원해 최종 diff에는 RL
 
 ## 최종 외부 검증 증거
 
-- main 애플리케이션 병합: `8b2b691`, PR #23
-- RLS 안전 적용 문서 병합: `ba43a2b`, PR #24
+- main 애플리케이션 병합: `9a117e4`, PR #23
+- RLS 안전 적용 문서 병합: `1865316`, PR #24
 - 두 main 커밋의 GitHub Production Deployment: `success`
 - Dashboard: 기존 정책을 보관하고 SQL 실행 뒤 목표 정책 4개 확인
 - 익명 REST API: SELECT HTTP 200
