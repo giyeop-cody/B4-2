@@ -1,5 +1,6 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
 import { isSupabaseConfigured, supabase } from '../lib/supabaseClient'
+import { buildAuthRedirectURL } from '../lib/authRedirect'
 
 export const AuthContext = createContext(null)
 
@@ -47,10 +48,17 @@ export function AuthProvider({ children }) {
 
   const signUp = async ({ email, password, displayName }) => {
     if (!supabase) return { error: new Error('Supabase 인증 설정이 없습니다.') }
+    const emailRedirectTo = buildAuthRedirectURL(
+      import.meta.env.VITE_APP_URL,
+      globalThis.location?.origin,
+    )
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { display_name: displayName } },
+      options: {
+        data: { display_name: displayName },
+        emailRedirectTo,
+      },
     })
     if (data.user && data.session) setUser(data.user)
     return { data, error }
