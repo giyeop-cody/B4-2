@@ -2,6 +2,7 @@
 
 - 상태: 원격 재작성·검증 완료 / GitHub Contributors 목록 캐시 갱신 대기
 - GitHub Issue: <https://github.com/giyeop-cody/B4-2/issues/27>
+- 검증 PR: <https://github.com/giyeop-cody/B4-2/pull/28>
 - 날짜: 2026-08-14
 - 목표 작성자: `giyeop-cody <cody.giyeop@gmail.com>`
 
