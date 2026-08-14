@@ -1,9 +1,9 @@
 # ISSUE-022: 공개 조회와 로그인 사용자 쓰기 권한 연결
 
-- 상태: 구현·로컬 검사·원격 이슈 생성 완료 / 원격 RLS·배포 검증 대기
+- 상태: 구현·로컬 검사·원격 이슈·PR 완료 / 원격 RLS·병합·배포 검증 대기
 - GitHub Issue: <https://github.com/giyeop-cody/B4-2/issues/22>
 - 관련 브랜치: `feature/authenticated-item-writes`
-- 관련 PR: 생성 후 URL 기록
+- 관련 PR: <https://github.com/giyeop-cody/B4-2/pull/23>
 - 날짜: 2026-08-14
 
 ## 문제
@@ -76,9 +76,9 @@ SQL이 `public.items`의 기존 정책을 먼저 제거하고 목적이 분명�
 - [ ] 익명 SELECT 성공 확인
 - [ ] 익명 INSERT/UPDATE/DELETE 거절 확인
 - [ ] 확인된 로그인 계정으로 원격 CRUD 확인
-- [ ] 기능 브랜치 push 및 PR 생성
-- [ ] `learning`에 기능·테스트·학습 문서 병합
-- [ ] `eval`에 평가용 요약 병합
+- [x] 기능 브랜치 push 및 PR #23 생성
+- [x] `learning`에 기능·테스트·학습 문서 병합·push
+- [x] `eval`에 평가용 요약 병합·push
 - [ ] PR 리뷰 후 main 병합
 - [ ] Vercel Production 성공 확인
 - [ ] 배포에서 익명 조회·쓰기 UI 차단 확인
