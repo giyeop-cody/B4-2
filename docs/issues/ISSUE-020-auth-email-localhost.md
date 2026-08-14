@@ -3,6 +3,7 @@
 - 상태: 완료
 - GitHub Issue: <https://github.com/giyeop-cody/B4-2/issues/20>
 - 코드 수정 PR: <https://github.com/giyeop-cody/B4-2/pull/21>
+- 최종 확인 문서 PR: <https://github.com/giyeop-cody/B4-2/pull/26>
 - 최종 수동 확인: 2026-08-14
 
 ## 사용자 제보
