@@ -1,6 +1,6 @@
 # 이슈 #27: Git commit 이메일 통합을 위한 전체 history rewrite
 
-- 상태: 로컬 재작성·검증 완료 / 원격 강제 push 전
+- 상태: 원격 재작성·검증 완료 / GitHub Contributors 목록 캐시 갱신 대기
 - GitHub Issue: <https://github.com/giyeop-cody/B4-2/issues/27>
 - 날짜: 2026-08-14
 - 목표 작성자: `giyeop-cody <cody.giyeop@gmail.com>`
@@ -67,11 +67,27 @@ SHA mapping 파일의 old SHA는 복구와 감사 목적이므로 의도적으�
 - [x] 30개 브랜치 ref mapping 생성
 - [x] 24개 브랜치, 92개 일반 문서 SHA 참조 갱신
 - [x] `.mailmap`으로 기존 이메일 재유입 표시 방어
-- [ ] 모든 원격 heads force push
-- [ ] 원격 author/committer 이메일 재검사
-- [ ] main·learning·eval tip 확인
-- [ ] GitHub Contributors 갱신 확인
-- [ ] 복구 절차와 새 clone 안내
+- [x] 원격 heads 30개 atomic force-with-lease push
+- [x] fresh remote clone의 author/committer 이메일 재검사
+- [x] main·learning·eval와 전체 30개 원격 tip 일치 확인
+- [x] GitHub Commit API에서 main 141개가 모두 `giyeop-cody`에 연결됨을 확인
+- [x] GitHub contributor stats 재계산 결과 `giyeop-cody` 한 명만 확인
+- [ ] 일반 Contributors 목록의 이전 캐시 갱신 확인
+- [x] 복구 절차와 새 clone 안내
+
+## 원격 검증 결과
+
+- 기존 이메일 author: 0
+- 기존 이메일 committer: 0
+- 전체 브랜치 author: 목표 이메일 199개
+- 일반 committer: 목표 이메일 194개
+- GitHub merge committer: noreply 5개 유지
+- 원격 head: 30/30 로컬 최종 ref와 일치
+- GitHub main Commit API: 141/141 `giyeop-cody <cody.giyeop@gmail.com>` 연결
+- GitHub contributor stats: `giyeop-cody` 한 명
+- 일반 Contributors API: 이전 두 계정 결과가 캐시에 남아 있어 갱신 대기
+
+GitHub Contributors 집계는 비동기 캐시이므로 commit 자체가 잘못된 상태와 구분한다. 실제 원격 commit과 통계 재계산 결과는 이미 한 계정으로 통합됐다.
 
 ## 복구 방법
 
