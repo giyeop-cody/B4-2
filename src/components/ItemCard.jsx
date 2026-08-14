@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
 
-function ItemCard({ item, onDelete }) {
+function ItemCard({ item, onDelete, canWrite = false }) {
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, border: '1px solid #e0e0e0', borderRadius: 8, padding: '16px 20px', background: '#fff' }}>
       <div style={{ flex: 1 }}>
@@ -12,10 +12,12 @@ function ItemCard({ item, onDelete }) {
           <span style={{ color: '#aaa', fontSize: 12 }}>{item.created_at ? new Date(item.created_at).toLocaleDateString('ko-KR') : ''}</span>
         </div>
       </div>
-      <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-        <Link to={`/items/${item.id}/edit`} style={{ padding: '5px 12px', border: '1px solid #d1d5db', borderRadius: 5, background: '#fff', color: '#555', textDecoration: 'none', fontSize: 13 }}>수정</Link>
-        <button onClick={() => onDelete(item.id)} style={{ padding: '5px 12px', border: '1px solid #fecaca', borderRadius: 5, background: '#fff', color: '#dc2626', cursor: 'pointer', fontSize: 13 }}>삭제</button>
-      </div>
+      {canWrite && (
+        <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+          <Link to={`/items/${item.id}/edit`} style={{ padding: '5px 12px', border: '1px solid #d1d5db', borderRadius: 5, background: '#fff', color: '#555', textDecoration: 'none', fontSize: 13 }}>수정</Link>
+          <button onClick={() => onDelete(item.id)} style={{ padding: '5px 12px', border: '1px solid #fecaca', borderRadius: 5, background: '#fff', color: '#dc2626', cursor: 'pointer', fontSize: 13 }}>삭제</button>
+        </div>
+      )}
     </div>
   )
 }
