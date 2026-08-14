@@ -42,6 +42,8 @@ export function useItem(id) {
     }
   }, [id])
 
+  const clearMutationError = useCallback(() => setMutationError(null), [])
+
   useEffect(() => {
     if (id) fetchItem()
   }, [id, fetchItem])
@@ -54,6 +56,6 @@ export function useItem(id) {
     refetch: fetchItem,
     updateItem,
     deleteItem,
-    clearMutationError: () => setMutationError(null),
+    clearMutationError,
   }
 }
