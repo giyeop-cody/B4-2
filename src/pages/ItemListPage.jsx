@@ -55,7 +55,7 @@ export default function ItemListPage() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <h1 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>아이템 목록</h1>
-        <Link to="/items/new" style={{ padding: '8px 16px', background: '#3b82f6', color: '#fff', borderRadius: 6, textDecoration: 'none', fontSize: 14, fontWeight: 600 }}>+ 새 아이템</Link>
+        <Link to="/items/new" style={{ padding: '8px 16px', background: '#3b82f6', color: '#fff', borderRadius: 6, textDecoration: 'none', fontSize: 14, fontWeight: 600 }}>+ 새 아이템 등록</Link>
       </div>
       <CategoryFilter value={category} onChange={setCategory} counts={categoryCounts} />
       {mutationError && <div style={{ marginBottom: 16 }}><ErrorBanner message={mutationError} /></div>}
@@ -64,8 +64,6 @@ export default function ItemListPage() {
         error={error}
         data={filteredItems}
         emptyMessage={emptyMessage}
-        emptyActionLabel="새 아이템 등록하기"
-        emptyActionTo="/items/new"
         onRetry={refetch}
       >
         {(data) => (
