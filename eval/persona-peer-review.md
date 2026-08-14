@@ -8,8 +8,8 @@
 
 - learning 브랜치 커밋 그래프
 - README와 LEARNING
-- #6~#19 이슈 문서
-- 단위 테스트 20개, E2E 2개, 원격 CRUD 결과
+- #6~#20 이슈 문서
+- 단위 테스트 23개, E2E 2개, 원격 CRUD 결과
 - 보너스 구현 코드
 
 ## 잘된 점
@@ -48,9 +48,10 @@ Vercel Production이 main `cda6ee1`을 배포한 뒤 실제 화면에서 `Supaba
 | 구조 6~9 | 4/4 | 3 hooks, 역할 폴더, 11 components, 공통 상태 UI |
 | React 이해 10~13 | 4/4 | README/LEARNING 설명과 상태 변화 예시 |
 | 통합 설명 14~15 | 2/2 | 전체 흐름과 Supabase 선택/트러블슈팅 |
-| 보너스 B1~B3 | 3/3 | AuthContext, 메모이제이션, Auth/ProtectedRoute |
+| 보너스 B1~B2 | 2/2 | AuthContext 전역 상태, 메모이제이션 |
+| 보너스 B3 | 조건부 | Auth/ProtectedRoute 코드는 확인. 인증 이메일 redirect는 PR 수정 후 Dashboard·실메일 확인 대기 |
 
-**학습 동료 페르소나 최종 판단:** 필수 15/15 근거 확인, 보너스 3/3 근거 확인.
+**학습 동료 페르소나 현재 판단:** 필수 15/15 근거 확인. 인증 보너스는 이슈 #20의 실제 메일 재검증 뒤 최종 표시한다.
 
 이 점수는 학습을 돕는 페르소나 검토 결과이며 플랫폼 재평가 점수나 외부 사람의 실제 평가를 대신하지 않는다.
 외부 동료 3인의 직접 의견은 `external-peer-evaluation-form.md`에 받아야 한다.
