@@ -12,7 +12,7 @@
 - 조회 오류와 등록·수정·삭제 오류 상태 분리
 - AuthContext 전역 사용자 상태, 로그인/가입, `/profile` 보호 라우트
 - `useMemo`, `useCallback`, `React.memo` 적용
-- 단위/컴포넌트 20개, 로컬 브라우저 2개, Vercel 원격 UI CRUD 1개, API CRUD 검사 통과
+- 단위/컴포넌트 23개, 로컬 브라우저 2개, Vercel 원격 UI CRUD 1개, API CRUD 검사 통과
 - 자세한 현재 실행법과 구조는 `README.md`, 문제 해결은 `docs/issues/` 참고
 
 보너스는 과제 원문에서는 선택 사항이지만, 이번 사용자 요청에서는 모두 완료 범위로 정했다.
@@ -909,7 +909,7 @@ React 자동 재렌더링 (화면 갱신)
 | 데이터 패칭 | useEffect + fetch | React Query, SWR (캐싱, 재시도 자동화) |
 | 타입 안정성 | JavaScript | TypeScript (컴파일 타임 에러 검출) |
 | 스타일링 | 인라인 스타일 | Tailwind CSS, CSS Modules |
-| 테스트 | 단위 20개 + 로컬 E2E 2개 + 배포 E2E 1개 | CI 자동 실행과 더 많은 실패 경로 |
+| 테스트 | 단위 23개 + 로컬 E2E 2개 + 배포 E2E 1개 | CI 자동 실행과 더 많은 실패 경로 |
 | 인증 | Supabase 이메일 Auth + 보호 라우트 | 사용자별 RLS와 OAuth |
 
 ---
