@@ -35,6 +35,7 @@ export function AuthProvider({ children }) {
   const signIn = async ({ email, password }) => {
     if (!supabase) return { error: new Error('Supabase 인증 설정이 없습니다.') }
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (data.user) setUser(data.user)
     return { data, error }
   }
 
@@ -45,6 +46,7 @@ export function AuthProvider({ children }) {
       password,
       options: { data: { display_name: displayName } },
     })
+    if (data.user && data.session) setUser(data.user)
     return { data, error }
   }
 
