@@ -1,5 +1,7 @@
 import { useState } from 'react'
-export default function ItemForm({ initialData, onSubmit, submitting }) {
+import ErrorBanner from './ErrorBanner'
+
+export default function ItemForm({ initialData, onSubmit, submitting, submitError }) {
   const [title, setTitle] = useState(initialData?.title || '')
   const [content, setContent] = useState(initialData?.content || '')
   const [category, setCategory] = useState(initialData?.category || '일반')
@@ -22,6 +24,7 @@ export default function ItemForm({ initialData, onSubmit, submitting }) {
 
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {submitError && <ErrorBanner message={submitError} />}
       <div>
         <label style={{ display: 'block', fontSize: 14, fontWeight: 600, marginBottom: 6, color: '#333' }}>제목 <span style={{ color: '#dc2626' }}>*</span></label>
         <input type="text" value={title} onChange={e => { setTitle(e.target.value); if (errors.title) setErrors(p => ({ ...p, title: null })) }} style={errors.title ? { width: '100%', padding: '10px 12px', border: '1px solid #dc2626', borderRadius: 6, fontSize: 14, boxSizing: 'border-box' } : { width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 14, boxSizing: 'border-box' }} placeholder="제목을 입력하세요" />
