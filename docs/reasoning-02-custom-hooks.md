@@ -1,6 +1,6 @@
 # 추론 기록 #02: 커스텀 훅 분리
 
-## 질문: useItems를 훅으로 분리한 이유는?
+## 질문: useItems, useItem, useAuth를 훅으로 분리한 이유는?
 
 ### 문제 상황
 
@@ -57,12 +57,13 @@ function ItemListPage() {
 
 ### 상태 관리 패턴 (항목 3-3)
 
-모든 훅이 동일한 3상태 패턴을 사용:
+데이터 훅은 조회 상태와 변경 상태를 구분한다:
 
 ```javascript
 const [data, setData] = useState(null)       // 성공
 const [loading, setLoading] = useState(true)  // 로딩
-const [error, setError] = useState(null)      // 실패
+const [error, setError] = useState(null)      // 조회 실패
+const [mutationError, setMutationError] = useState(null) // 등록·수정·삭제 실패
 // 빈 상태: data !== null && data.length === 0 (컴포넌트에서 판단)
 ```
 

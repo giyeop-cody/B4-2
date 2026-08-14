@@ -5,6 +5,9 @@ import ItemDetailPage from './pages/ItemDetailPage'
 import ItemNewPage from './pages/ItemNewPage'
 import ItemEditPage from './pages/ItemEditPage'
 import NotFoundPage from './pages/NotFoundPage'
+import LoginPage from './pages/LoginPage'
+import ProfilePage from './pages/ProfilePage'
+import ProtectedRoute from './components/ProtectedRoute'
 
 export default function App() {
   return (
@@ -16,6 +19,8 @@ export default function App() {
           <Route path="items/new" element={<ItemNewPage />} />
           <Route path="items/:id" element={<ItemDetailPage />} />
           <Route path="items/:id/edit" element={<ItemEditPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

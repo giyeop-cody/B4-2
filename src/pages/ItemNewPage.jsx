@@ -5,14 +5,14 @@ import ItemForm from '../components/ItemForm'
 
 export default function ItemNewPage() {
   const navigate = useNavigate()
-  const { addItem } = useItems()
+  const { addItem, mutationError } = useItems()
   const [submitting, setSubmitting] = useState(false)
 
   const handleSubmit = async (formData) => {
     setSubmitting(true)
-    const ok = await addItem(formData)
+    const created = await addItem(formData)
     setSubmitting(false)
-    if (ok) navigate('/items')
+    if (created) navigate(`/items/${created.id}`)
   }
 
   return (
@@ -20,7 +20,7 @@ export default function ItemNewPage() {
       <div style={{ marginBottom: 16 }}><Link to="/items" style={{ color: '#3b82f6', textDecoration: 'none', fontSize: 14 }}>← 목록으로</Link></div>
       <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 20 }}>새 아이템 등록</h1>
       <div style={{ border: '1px solid #e0e0e0', borderRadius: 8, padding: 24, background: '#fff' }}>
-        <ItemForm onSubmit={handleSubmit} submitting={submitting} />
+        <ItemForm onSubmit={handleSubmit} submitting={submitting} submitError={mutationError} />
       </div>
     </div>
   )
