@@ -45,14 +45,20 @@
 | 전역 상태 보너스 | 통과 | AuthContext |
 | 성능 보너스 | 통과 | useMemo/useCallback/React.memo |
 | 인증 보너스 | 통과 | Supabase Auth + 보호 profile |
-| learning/eval 브랜치 | 진행 중 | learning 완료, eval 최종 평가 정리 전 |
-| 실제 외부 동료평가 | 대기 | eval 요청서에 서명/의견 필요 |
+| learning/eval 브랜치 | 통과 | 두 브랜치와 문제별 브랜치 원격 push 확인 |
+| 학습 동료 페르소나 평가 | 통과 | eval/persona-peer-review.md |
+| 실제 외부 동료평가 | 대기 | eval 요청서에 실제 평가자 서명/의견 필요 |
 
 ## 배포 후 마지막 확인
 
-main push와 Vercel 재배포 뒤 아래를 다시 기록한다.
+2026-08-14에 main `cda6ee1` push 뒤 Vercel Production 배포를 확인했다.
 
-- 배포 commit과 HTTP 응답
-- 배포 번들에 새 로그인/필터 기능 포함 여부
-- 배포 Supabase CRUD 재검사
-- GitHub learning/eval 브랜치 존재 여부
+- GitHub Production deployment ref: `cda6ee1`
+- 배포 첫 화면: HTTP 200, 새 번들 `index-o6Jac7hJ.js`
+- 배포 UI: `Supabase 원격` 배지 확인
+- 배포 UI CRUD: 등록 → 상세 → 수정 → 삭제 1개 테스트 통과
+- 검사 항목: 삭제 완료(원격에 남기지 않음)
+- 원격 브랜치: `main`, `learning`, `eval` 및 문제별 작업 브랜치 확인
+- GitHub 이슈: #1~#18 해결 근거와 함께 완료 처리
+
+이후 평가 문서만 추가 배포되더라도 앱 기능 코드는 위 검사와 같다.
