@@ -3,7 +3,7 @@
 - 상태: 완료
 - GitHub Issue: <https://github.com/giyeop-cody/B4-2/issues/22>
 - 관련 브랜치: `feature/authenticated-item-writes`, `fix/rls-safe-apply`
-- 관련 PR: <https://github.com/giyeop-cody/B4-2/pull/23>, <https://github.com/giyeop-cody/B4-2/pull/24>
+- 관련 PR: <https://github.com/giyeop-cody/B4-2/pull/23>, <https://github.com/giyeop-cody/B4-2/pull/24>, <https://github.com/giyeop-cody/B4-2/pull/25>
 - 날짜: 2026-08-14
 
 ## 문제
