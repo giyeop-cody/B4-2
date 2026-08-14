@@ -27,7 +27,7 @@ React 18, React Router 7, Supabase로 만든 아이템 CRUD SPA다. LocalStorage
 - 전역 사용자 상태(Context)
 - `useMemo`, `useCallback`, `React.memo` 성능 학습
 - Supabase 이메일 인증과 `/profile` 보호 라우트
-- Vitest/Testing Library 테스트 20개
+- Vitest/Testing Library 테스트 23개
 - Playwright 로컬 브라우저 흐름 2개 + Vercel 원격 CRUD 1개
 - 실제 Supabase CRUD 실증 검사 스크립트
 
