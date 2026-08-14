@@ -258,11 +258,13 @@ Supabase 이메일 로그인/가입과 전역 사용자 Context를 구현했다.
 
 회원가입 요청은 `VITE_APP_URL`을 `emailRedirectTo`로 전달한다. 값이 없으면 현재 브라우저 Origin을 사용한다. Supabase가 인증 토큰을 URL hash에 붙일 수 있고 앱도 HashRouter를 사용하므로 `/#/login` 경로는 넣지 않고 `https://b4-2.vercel.app` Origin만 사용한다.
 
-Supabase Dashboard에서도 다음 값을 확인해야 한다.
+2026-08-14 프로젝트 소유자가 Supabase Dashboard의 다음 값을 최종 확인했다.
 
 1. `Authentication → URL Configuration → Site URL`: `https://b4-2.vercel.app`
 2. `Redirect URLs`: `https://b4-2.vercel.app/**` 허용
-3. 로컬 인증 메일을 시험할 때만 `http://localhost:5173/**` 추가
+3. localhost 주소는 로컬 인증 메일을 시험할 때만 별도 사용
+
+실제 새 인증 이메일도 수신해 링크가 localhost가 아니라 `https://b4-2.vercel.app` Production으로 복귀하는 것을 확인했다.
 
 코드의 `emailRedirectTo`가 허용 목록에 없으면 Supabase가 Dashboard의 Site URL로 돌아갈 수 있다. 프론트엔드 UI·보호 라우트·API 세션 검사는 실수와 정상 화면 접근을 막는 여러 겹의 방어다. 개발자 도구나 직접 HTTP 요청까지 막는 최종 데이터 권한은 위 RLS를 실제 원격 DB에 적용해 확인했다.
 
@@ -291,7 +293,7 @@ Vercel 프로젝트에 다음 환경변수를 등록한다.
 4. `/#/items`에서 익명 목록·상세, 등록 CTA의 로그인 이동, 수정·삭제 비노출을 검사한다.
 5. 확인된 평가용 계정이 있을 때 로그인 등록·수정·삭제와 프로필·로그아웃을 검사한다.
 
-2026-08-14 위 다섯 단계를 완료했다. 배포 익명 E2E 1/1, 익명 REST 권한 4개 요청, 실제 계정의 등록·수정·삭제·프로필·로그아웃 수동 검사가 통과했다. 별도 이슈 #20의 Dashboard 인증 URL과 새 인증 이메일의 실제 복귀 링크 확인은 아직 외부 수동 작업으로 남아 있다.
+2026-08-14 위 다섯 단계를 완료했다. 배포 익명 E2E 1/1, 익명 REST 권한 4개 요청, 실제 계정의 등록·수정·삭제·프로필·로그아웃 수동 검사가 통과했다. 이슈 #20의 Dashboard 인증 URL과 새 인증 이메일의 실제 Production 복귀 링크도 최종 확인했다.
 
 ## 보안
 
