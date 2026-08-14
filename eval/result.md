@@ -5,12 +5,12 @@
 아래 12/15 결과는 2026-08-10의 **과거 실제 사전평가**이며 지우지 않는다. 그 뒤 사용자 요청에 따라 전체 코드를 실증 검사하고 누락을 수정했다.
 
 - 현재 소스: 필수 15항목 근거와 보너스 3항목 구현
-- 자동 검사: 단위/컴포넌트 23개, 로컬 브라우저 2개, 빌드 통과, 취약점 0개
-- 실제 Supabase: API CRUD와 Vercel 화면 CRUD 모두 통과
-- 배포 확인: main `cda6ee1`, HTTP 200, 새 번들 및 `Supabase 원격` 배지
-- 추가: AuthContext, 로그인/가입, 보호 profile, useMemo/useCallback/React.memo
-- 학습 동료 페르소나 검토: 필수 15/15 근거 확인
-- 인증 이메일 localhost 이슈 #20: 코드 수정 PR 반영, Dashboard URL과 실제 메일 재확인 대기
+- 자동 검사: 단위/컴포넌트 28개, 로컬 브라우저 2개, 배포 익명 권한 1개, 빌드 통과, 취약점 0개
+- 실제 Supabase: 공개 조회·로그인 쓰기와 RLS 익명 차단 통과
+- 배포 확인: main `100adca`, Production `success`, `Supabase 원격` 배지
+- 추가: AuthContext, 로그인/가입, 등록·수정·프로필 보호, useMemo/useCallback/React.memo
+- 학습 동료 페르소나 검토: 필수 15/15와 보너스 근거 확인
+- 인증 이메일 localhost 이슈 #20: 코드·Dashboard URL·실제 새 이메일 Production 복귀 확인 완료
 - 남은 외부 절차: 외부 동료 3명의 직접 평가
 
 플랫폼 사전평가를 다시 실행하지 않았으므로 새 점수를 실제 사전평가 점수라고 적지 않는다.
