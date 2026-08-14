@@ -51,9 +51,9 @@
 
 ## 배포 후 마지막 확인
 
-2026-08-14에 main `cda6ee1` push 뒤 Vercel Production 배포를 확인했다.
+2026-08-14에 main `3899a33` push 뒤 Vercel Production 배포를 확인했다.
 
-- GitHub Production deployment ref: `cda6ee1`
+- GitHub Production deployment ref: `3899a33`
 - 배포 첫 화면: HTTP 200, 새 번들 `index-o6Jac7hJ.js`
 - 배포 UI: `Supabase 원격` 배지 확인
 - 배포 UI CRUD: 등록 → 상세 → 수정 → 삭제 1개 테스트 통과

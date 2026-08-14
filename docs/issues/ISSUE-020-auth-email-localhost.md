@@ -46,7 +46,7 @@ Dashboard 관리 권한은 publishable key로 얻을 수 없으므로 코드 저
 - 단위/컴포넌트 테스트: 23개 통과
 - 제품 빌드: 통과
 - GitHub PR #21: main 병합 완료
-- Vercel Production: PR merge commit `85c5b95` 배포 성공
+- Vercel Production: PR merge commit `72f73fc` 배포 성공
 - 배포 회원가입 요청 가로채기: `redirect_to=https://b4-2.vercel.app`
 - 배포 요청의 localhost 포함 여부: false
 - 검사 요청은 Supabase로 전달하지 않아 계정을 만들지 않음
