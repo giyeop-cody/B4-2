@@ -1,5 +1,7 @@
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
-export default function ItemCard({ item, onDelete }) {
+
+function ItemCard({ item, onDelete }) {
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, border: '1px solid #e0e0e0', borderRadius: 8, padding: '16px 20px', background: '#fff' }}>
       <div style={{ flex: 1 }}>
@@ -17,3 +19,5 @@ export default function ItemCard({ item, onDelete }) {
     </div>
   )
 }
+
+export default memo(ItemCard)
