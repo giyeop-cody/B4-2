@@ -10,7 +10,7 @@
 - 검사일: 2026-08-14 (Asia/Seoul)
 - Node.js: 20.20.2
 - npm: 10.8.2
-- 기준 커밋: `4378fce`
+- 기준 커밋: `d3482a4`
 - 배포 주소: <https://b4-2.vercel.app/>
 - 원격 저장소: <https://github.com/giyeop-cody/B4-2>
 
