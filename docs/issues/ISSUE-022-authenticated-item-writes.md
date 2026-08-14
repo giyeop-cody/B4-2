@@ -1,9 +1,9 @@
 # ISSUE-022: 공개 조회와 로그인 사용자 쓰기 권한 연결
 
-- 상태: 구현·로컬 검사·원격 이슈·PR 완료 / 원격 RLS·병합·배포 검증 대기
+- 상태: 완료
 - GitHub Issue: <https://github.com/giyeop-cody/B4-2/issues/22>
-- 관련 브랜치: `feature/authenticated-item-writes`
-- 관련 PR: <https://github.com/giyeop-cody/B4-2/pull/23>
+- 관련 브랜치: `feature/authenticated-item-writes`, `fix/rls-safe-apply`
+- 관련 PR: <https://github.com/giyeop-cody/B4-2/pull/23>, <https://github.com/giyeop-cody/B4-2/pull/24>
 - 날짜: 2026-08-14
 
 ## 문제
@@ -48,7 +48,7 @@ Supabase Auth 로그인·프로필은 구현되어 있었지만 아이템 CRUD �
 3. API 세션 검사는 앱 코드의 mutation을 한 번 더 막는다.
 4. RLS는 직접 HTTP 요청도 데이터베이스에서 최종 거절한다.
 
-앞의 세 단계만으로는 데이터 보안이 완성되지 않는다. RLS SQL을 Dashboard에서 실제 실행해야 한다.
+앞의 세 단계만으로는 데이터 보안이 완성되지 않는다. 2026-08-14 프로젝트 소유자가 RLS SQL을 Dashboard에서 실제 실행했고, 아래 원격 API 검사로 최종 데이터 권한까지 확인했다.
 
 ## 트러블슈팅: 기존 공개 정책을 남기면 제한되지 않음
 
@@ -66,7 +66,15 @@ SQL이 `public.items`의 기존 정책을 먼저 제거하고 목적이 분명�
 - `anon` 쓰기 테이블 권한의 명시적 회수
 - 실행 뒤 네 정책을 바로 보여주는 확인 조회
 
-Dashboard 실행 전에 발견했으므로 `begin`/`commit`, `revoke`/`grant`, 마지막 `pg_policies` 조회를 추가했다. 사용자는 실행 전 정책 조회 결과를 별도로 보관한 뒤 전체 transaction을 실행한다.
+Dashboard 실행 전에 발견했으므로 `begin`/`commit`, `revoke`/`grant`, 마지막 `pg_policies` 조회를 추가했다. 사용자는 실행 전 정책 조회 결과를 별도로 보관한 뒤 전체 transaction을 실행했다.
+
+## 트러블슈팅: main 기반 수정이 learning에 평가 파일을 섞음
+
+RLS 후속 수정 브랜치는 main에서 만들었다. 이 브랜치를 learning에 통째로 merge하자 main에만 있던 평가 전용 `eval/` 파일이 learning에도 들어왔다.
+
+### 처리와 교훈
+
+learning의 `eval/` 경로를 merge 전 상태로 복원해 최종 diff에는 RLS 관련 세 파일만 남겼다. 평가 파일이 필요한 eval 브랜치에는 이 삭제 커밋을 병합하지 않았다. 목적이 다른 브랜치 사이에서 작은 후속 수정을 옮길 때는 전체 merge 전에 경로 diff를 확인하고, 필요하면 해당 커밋만 cherry-pick해야 한다.
 
 ## 로컬 검증
 
@@ -81,19 +89,32 @@ Dashboard 실행 전에 발견했으므로 `begin`/`commit`, `revoke`/`grant`, �
 다음 항목은 파일 작성만으로 완료되지 않는다.
 
 - [x] GitHub Issue #22 생성 및 이 문서에 URL 기록
-- [ ] Supabase Dashboard에서 현재 정책 확인·백업
-- [ ] `supabase/policies-authenticated-writes.sql` 실제 실행
-- [ ] 익명 SELECT 성공 확인
-- [ ] 익명 INSERT/UPDATE/DELETE 거절 확인
-- [ ] 확인된 로그인 계정으로 원격 CRUD 확인
+- [x] Supabase Dashboard에서 현재 정책 확인·백업
+- [x] `supabase/policies-authenticated-writes.sql` 실제 실행
+- [x] 익명 SELECT 성공 확인
+- [x] 익명 INSERT/UPDATE/DELETE 거절 확인
+- [x] 확인된 로그인 계정으로 원격 CRUD 확인
 - [x] 기능 브랜치 push 및 PR #23 생성
+- [x] RLS 안전 적용 보완 브랜치 push 및 PR #24 생성
 - [x] `learning`에 기능·테스트·학습 문서 병합·push
 - [x] `eval`에 평가용 요약 병합·push
-- [ ] PR 리뷰 후 main 병합
-- [ ] Vercel Production 성공 확인
-- [ ] 배포에서 익명 조회·쓰기 UI 차단 확인
-- [ ] 배포에서 로그인 CRUD·프로필·로그아웃 확인
+- [x] PR 리뷰 후 main 병합
+- [x] Vercel Production 성공 확인
+- [x] 배포에서 익명 조회·쓰기 UI 차단 확인
+- [x] 배포에서 로그인 CRUD·프로필·로그아웃 확인
+
+## 최종 외부 검증 증거
+
+- main 애플리케이션 병합: `8b2b691`, PR #23
+- RLS 안전 적용 문서 병합: `ba43a2b`, PR #24
+- 두 main 커밋의 GitHub Production Deployment: `success`
+- Dashboard: 기존 정책을 보관하고 SQL 실행 뒤 목표 정책 4개 확인
+- 익명 REST API: SELECT HTTP 200
+- 익명 REST API: INSERT/UPDATE/DELETE 각각 HTTP 401
+- 배포 익명 Playwright: 1/1 통과
+- 실제 계정 수동 검사: 등록 → 수정 → 삭제 → 프로필 → 로그아웃과 로그아웃 뒤 쓰기 UI 비노출까지 통과
+- 수동 검사 자격 증명은 공유하거나 저장하지 않았고 검사 데이터는 삭제함
 
 ## 완료 기준
 
-코드 병합만이 아니라 RLS 적용 증빙, Vercel 배포 성공, 익명 권한 검사, 확인된 계정의 쓰기 검사까지 있어야 전체 완료다. 외부 계정이나 Dashboard 권한이 없어 실행하지 못한 항목은 미완료로 남긴다.
+코드 병합뿐 아니라 RLS 적용, Vercel 배포, 익명 권한, 확인된 계정의 쓰기까지 검증해 완료했다. 작성자별 소유권은 합의한 범위대로 포함하지 않았다.

@@ -89,9 +89,9 @@
 | 단위·컴포넌트 | 통과 | 10개 파일, 28/28 |
 | 로컬 브라우저 | 통과 | 2/2 |
 | 빌드·보안 | 통과 | Vite build, audit 취약점 0 |
-| 데이터베이스 RLS | **미적용** | SQL 파일만 작성. Dashboard 실행 증빙 없음 |
-| 배포 익명 권한 | **미검사** | main 병합·재배포 전 |
-| 로그인 원격 CRUD | **미검사** | 확인된 평가용 계정 없음 |
+| 데이터베이스 RLS | 통과 | Dashboard 적용 뒤 정책 4개 확인, 익명 SELECT 200·mutation 401 |
+| 배포 익명 권한 | 통과 | Production success, Playwright 1/1 |
+| 로그인 원격 CRUD | 통과 | 실제 계정으로 등록·수정·삭제·프로필·로그아웃 수동 확인 |
 | 실제 외부 동료평가 | **미완료** | 작성 양식만 준비됨 |
 
-이 변경의 최종 권한 목표는 공개 SELECT와 `authenticated` INSERT/UPDATE/DELETE다. 작성자별 소유권은 사용자 요청에 따라 범위에서 제외했다. SQL 파일이나 E2E 코드가 있다는 사실을 실제 Dashboard 적용·배포 통과로 바꾸어 기록하지 않는다.
+최종 권한은 공개 SELECT와 `authenticated` INSERT/UPDATE/DELETE로 적용·검증했다. 작성자별 소유권은 사용자 요청에 따라 범위에서 제외했다. 남은 항목은 실제 외부 동료 3인의 평가와 별도 이슈 #20의 인증 Dashboard URL·새 메일 복귀 링크 확인이다.
