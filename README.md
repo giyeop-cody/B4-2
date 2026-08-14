@@ -241,7 +241,7 @@ create table public.items (
 );
 ```
 
-목표 권한은 **누구나 SELECT, 로그인한 `authenticated` 사용자만 INSERT/UPDATE/DELETE**다. `supabase/policies-authenticated-writes.sql`을 Supabase Dashboard의 SQL Editor에서 실행하면 기존 공개 쓰기 정책을 제거하고 목표 정책을 만든다. PostgreSQL 정책은 허용 정책끼리 OR로 결합되므로 기존 공개 쓰기 정책을 남겨두면 로그인 제한이 되지 않는다.
+목표 권한은 **누구나 SELECT, 로그인한 `authenticated` 사용자만 INSERT/UPDATE/DELETE**다. `supabase/policies-authenticated-writes.sql`을 Supabase Dashboard의 SQL Editor에서 실행하면 기존 공개 쓰기 정책을 제거하고 목표 정책을 만든다. 실행 전 파일 첫머리의 조회로 현재 정책을 보관한다. 변경은 transaction 안에서 실행되어 중간 오류가 나면 함께 되돌아가며, 마지막 조회 결과 네 행을 확인한다. PostgreSQL 정책은 허용 정책끼리 OR로 결합되므로 기존 공개 쓰기 정책을 남겨두면 로그인 제한이 되지 않는다.
 
 SQL 파일을 Git에 추가한 것과 실제 원격 데이터베이스에 적용한 것은 다르다. Dashboard 실행과 결과 확인은 프로젝트 권한이 있는 사람이 해야 하며, 확인 전에는 적용 완료로 기록하지 않는다. 이번 과제는 작성자별 소유권까지 추가하지 않아 로그인 사용자는 모든 아이템을 수정·삭제할 수 있다.
 
