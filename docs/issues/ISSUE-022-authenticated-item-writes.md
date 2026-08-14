@@ -1,7 +1,7 @@
 # ISSUE-022: 공개 조회와 로그인 사용자 쓰기 권한 연결
 
-- 상태: 구현·로컬 검사 완료 / 원격 RLS·배포 검증 대기
-- GitHub Issue: 생성 후 URL 기록
+- 상태: 구현·로컬 검사·원격 이슈 생성 완료 / 원격 RLS·배포 검증 대기
+- GitHub Issue: <https://github.com/giyeop-cody/B4-2/issues/22>
 - 관련 브랜치: `feature/authenticated-item-writes`
 - 관련 PR: 생성 후 URL 기록
 - 날짜: 2026-08-14
@@ -70,7 +70,7 @@ SQL이 `public.items`의 기존 정책을 먼저 제거하고 목적이 분명�
 
 다음 항목은 파일 작성만으로 완료되지 않는다.
 
-- [ ] GitHub Issue 생성 및 이 문서에 URL 기록
+- [x] GitHub Issue #22 생성 및 이 문서에 URL 기록
 - [ ] Supabase Dashboard에서 현재 정책 확인·백업
 - [ ] `supabase/policies-authenticated-writes.sql` 실제 실행
 - [ ] 익명 SELECT 성공 확인

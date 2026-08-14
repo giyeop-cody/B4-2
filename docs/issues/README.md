@@ -21,6 +21,6 @@
 | #20 | 인증 이메일 확인 주소가 localhost로 생성됨 | 높음 | 부분 해결 | 코드 redirect 수정, Supabase Dashboard URL 확인 필요 |
 | #22 | Auth가 아이템 쓰기 권한과 분리됨 | 높음 | 부분 해결 | 코드·로컬 검사 완료, RLS·배포 검증 필요 |
 
-#21은 GitHub Pull Request 번호이므로 다음 변경 이슈는 #22를 사용한다. 원격 이슈를 실제 생성한 뒤 [ISSUE-022](ISSUE-022-authenticated-item-writes.md)에 URL을 기록한다.
+#21은 GitHub Pull Request 번호이므로 다음 변경 이슈는 #22를 사용했다. 원격 [GitHub Issue #22](https://github.com/giyeop-cody/B4-2/issues/22)와 [ISSUE-022](ISSUE-022-authenticated-item-writes.md)가 대응한다.
 
 각 상세 문서는 문제 재현 → 원인 → 선택지 → 해결 → 재검사 순서로 기록한다.
