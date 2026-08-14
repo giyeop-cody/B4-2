@@ -2,6 +2,21 @@
 
 > **문과 중졸도 이해할 수 있게** — 전에 코딩을 한 번도 해본 적 없는 사람이 읽어도 이해할 수 있도록 쓴 학습 노트입니다.
 
+## 2026-08-14 실증 검사 후 현재 상태
+
+이 문서 아래쪽에는 처음 구현하던 당시의 **React Router 6, 6개 라우트, 8개 컴포넌트, 자동 LocalStorage 대체** 기록이 남아 있다. 과거 시행착오를 지우지 않기 위해 그대로 두되, 현재 코드는 다음처럼 바뀌었다.
+
+- React 18 + React Router 7.18 + HashRouter
+- 라우트 8개, 페이지 7개, 재사용 컴포넌트 11개, 훅 3개
+- Supabase 원격 모드가 기본이며 LocalStorage는 직접 켠 로컬 학습 모드에서만 사용
+- 조회 오류와 등록·수정·삭제 오류 상태 분리
+- AuthContext 전역 사용자 상태, 로그인/가입, `/profile` 보호 라우트
+- `useMemo`, `useCallback`, `React.memo` 적용
+- 단위/컴포넌트 테스트 20개, 브라우저 테스트 2개, 원격 CRUD 검사 통과
+- 자세한 현재 실행법과 구조는 `README.md`, 문제 해결은 `docs/issues/` 참고
+
+보너스는 과제 원문에서는 선택 사항이지만, 이번 사용자 요청에서는 모두 완료 범위로 정했다.
+
 ---
 
 ## 📖 목차
@@ -123,14 +138,14 @@ B4-1 (이전 과제)                    B4-2 (이번 과제)
 | UI 고퀄리티 | "React 구조와 데이터 흐름"이 우선 |
 | 반응형 디자인 | 선택 사항 |
 | 백엔드 고급 기능 (RLS, 권한) | "필수 아님"으로 명시 |
-| 인증 | 본 프로젝트에서는 사용하지 않음 |
+| 인증 | 보너스로 Supabase 이메일 인증과 보호 라우트 구현 |
 
 ### 2.5 평가 기준 (루브릭) 분석
 
 | 항목 | 무엇을 보는가 | 우리가 대비한 것 |
 |------|-------------|-----------------|
-| **기능 동작** | 5개 라우트, CRUD, 상태 처리, 폼 검증, 배포 URL | 6개 라우트, CRUD 전부, StateView 통일, ItemForm 검증, Vercel 배포 |
-| **구조/설계** | 폴더 분리, 8개 컴포넌트, 커스텀 훅, 분리 이유 | pages/components/hooks/lib 분리, 8개 컴포넌트, 2개 훅, 분리 이유 문서화 |
+| **기능 동작** | 5개 라우트, CRUD, 상태 처리, 폼 검증, 배포 URL | 8개 라우트, 원격 CRUD, StateView 통일, ItemForm 검증, Vercel 배포 |
+| **구조/설계** | 폴더 분리, 8개 컴포넌트, 커스텀 훅, 분리 이유 | pages/components/hooks/context/lib 분리, 11개 컴포넌트, 3개 훅, 분리 이유 문서화 |
 | **React 개념 이해** | props vs state, useEffect, 비동기 상태, 데이터 흐름 | README에 props/state 비교, useEffect 설명, 데이터 흐름도 |
 | **통합 설명** | 전체 흐름, BaaS 선택 이유 | README에 전체 흐름 + Supabase 선택 이유 + 연동 어려움 |
 
@@ -247,18 +262,20 @@ App (최상위 컴포넌트)
 
 **본 프로젝트의 훅:**
 - `useItems()`: 목록 조회, 추가, 삭제 로직 → 목록 페이지에서 사용
-- `useItem(id)`: 단일 조회, 수정 로직 → 상세/수정 페이지에서 사용
+- `useItem(id)`: 단일 조회, 수정, 삭제 로직 → 상세/수정 페이지에서 사용
+- `useAuth()`: Context의 로그인 사용자와 인증 함수를 안전하게 사용
 
-### 3.6 기초 6: BaaS 연동과 Fallback
+### 3.6 기초 6: BaaS 연동과 명시적 로컬 학습 모드
 
-**무엇을 아야 하나?** 외부 서비스(Supabase)를 연동하고, 연동이 안 됐을 때 대비책(Fallback)을 두는 방법
+**무엇을 아야 하나?** 외부 서비스(Supabase)를 연동하고, 원격 모드와 로컬 연습 모드를 분명히 나누는 방법
 
-**왜 필요한가?** 평가 환경에서는 `.env` 파일이 없을 수 있습니다. 그때 앱이 죽지 않고 LocalStorage로 대체 동작해야 합니다.
+**왜 필요한가?** 과제는 원격 CRUD가 필수이므로 `.env` 누락을 LocalStorage 성공으로 숨기면 안 됩니다. 대신 인터넷 없는 학습에서는 `VITE_ALLOW_LOCAL_DB=true`를 직접 설정해 LocalStorage를 사용합니다.
 
 **핵심 개념:**
-- `isSupabaseConfigured`: Supabase 설정이 있는지 확인하는 플래그
-- `lib/api.js`: Supabase와 LocalDB 중 어느 것을 쓸지 결정하는 추상화 계층
+- `dataSource`: `supabase`, `local`, `missing` 중 현재 모드를 표시
+- `lib/api.js`: 명시적으로 선택된 데이터 소스만 사용
 - 같은 인터페이스(`selectAll`, `insert`, `update`, `remove`)로 두 가지 데이터 소스를 통일
+- 설정이 빠지면 이해할 수 있는 오류를 표시
 
 ---
 
@@ -379,7 +396,7 @@ function App() {
 **체험 포인트:**
 - `HashRouter`: 주소가 `/#/about` 형태가 됨 (정적 호스팅에서 안전)
 - `Link to="/about"`: 클릭하면 주소가 바뀌고 화면이 전환됨 (새로고침 없음)
-- 본 프로젝트는 이 구조를 확장하여 6개 라우트 + 중첩 라우트(Outlet)를 사용
+- 본 프로젝트는 이 구조를 확장하여 8개 라우트 + 중첩 라우트(Outlet)를 사용
 
 ### 4.5 체험 5: LocalStorage로 데이터 저장하기 (기초 6)
 
@@ -675,37 +692,38 @@ function Layout() {
 
 ---
 
-### 6.4 Job 5 (데이터 소스): LocalStorage Fallback — 🐛 이슈
+### 6.4 Job 5 (데이터 소스): 자동 Fallback을 명시적 학습 모드로 수정 — 🐛 이슈
 
 #### 🐛 발생한 문제
 
-평가 환경에서 `.env` 파일이 없으면 Supabase 클라이언트가 `undefined`로 초기화되어 앱이 크래시.
+처음에는 `.env`가 없으면 LocalStorage로 자동 전환했다. 앱은 열리지만 필수인 원격 CRUD 실패를 숨기는 새 문제가 생겼다.
 
 #### 🔍 원인 분석
 
-Supabase 클라이언트를 생성할 때 URL과 Key가 없으면 에러가 발생합니다. 평가 환경이나 로컬에서 `.env` 없이 실행하는 경우가 있으므로, 이 상황에서 앱이 죽으면 안 됩니다.
+개발 편의와 제출 조건을 같은 규칙으로 처리한 것이 원인이었다. 평가 환경에서는 원격 설정이 빠지면 성공처럼 보이지 말고 오류를 분명히 알려야 한다.
 
-#### 💡 해결책: 3계층 추상화
+#### 💡 해결책: 명시적 3가지 모드
 
 ```
 컴포넌트/훅 (useItems)
     ↓ 호출
 api.js (추상화 계층 — 어디서 데이터를 가져올지 결정)
     ↓ 분기
-    ├── isSupabaseConfigured == true  → Supabase 호출
-    └── isSupabaseConfigured == false → LocalDB 호출
+    ├── URL + Key 있음                     → Supabase 호출
+    ├── VITE_ALLOW_LOCAL_DB == true         → LocalDB 호출
+    └── 둘 다 아님                          → 설정 오류 표시
 ```
 
 **구조:**
-1. `supabaseClient.js`: `isSupabaseConfigured` 플래그 (URL/Key가 있으면 true)
+1. `dataSource.js`: 원격, 로컬 학습, 설정 누락을 구분
 2. `localDB.js`: LocalStorage 기반 CRUD (Supabase 인터페이스와 동일)
-3. `api.js`: 두 소스 중 어느 것을 쓸지 분기 + 통일된 인터페이스(`{ data, error }`)
+3. `api.js`: 선택된 소스만 호출하고 설정 누락은 오류 처리
 
 #### ⚖️ 트레이드오프
 
-- **포기한 것:** 코드 복잡도 증가 (두 개의 데이터 소스 관리)
-- **얻은 것:** 어떤 환경에서도 앱이 동작 (Supabase 있으면 Supabase, 없으면 LocalStorage)
-- **판단:** 평가 환경에서의 안정성이 가장 중요 → Fallback 필수
+- **포기한 것:** 설정 없이도 성공 화면이 뜨는 편리함
+- **얻은 것:** 원격 실패를 숨기지 않으면서 로컬 연습은 유지
+- **판단:** 배포는 Supabase가 필수, LocalStorage는 직접 켠 학습 모드로만 제한
 
 ---
 
@@ -879,7 +897,7 @@ React 자동 재렌더링 (화면 갱신)
 
 1. **"화면 = state의 거울"**: state가 바뀌면 화면이 자동으로 바뀐다. 직접 DOM을 조작할 필요가 없다. 이것이 React가 순수 JS보다 편리한 이유다.
 
-2. **"추상화는 보험이다"**: api.js로 데이터 소스를 추상화했기 때문에, Supabase가 안 되면 LocalStorage로 전환할 수 있었다. 추상화는 "복잡함을 감추는 것"이 아니라 "대안을 갖는 것"이다.
+2. **"추상화는 경계를 만든다"**: api.js로 Supabase와 LocalStorage의 사용법을 통일하되, 원격 실패가 자동으로 로컬 성공으로 바뀌지 않게 모드를 분명히 했다.
 
 3. **"배포는 개발의 절반"**: 아무리 좋은 코드를 짜도 배포가 안 되면 사용자가 볼 수 없다. 배포 환경의 특성(정적 호스팅, CDN 캐시, 환경변수)을 처음부터 고려해야 한다.
 
@@ -887,12 +905,12 @@ React 자동 재렌더링 (화면 갱신)
 
 | 주제 | 이 과제에서 | 다음에 배울 것 |
 |------|-----------|---------------|
-| 상태 관리 | useState (컴포넌트 로컬) | Context API, Redux (전역 상태) |
+| 상태 관리 | useState + AuthContext | 상태가 커질 때 Context 분리 또는 전용 도구 검토 |
 | 데이터 패칭 | useEffect + fetch | React Query, SWR (캐싱, 재시도 자동화) |
 | 타입 안정성 | JavaScript | TypeScript (컴파일 타임 에러 검출) |
 | 스타일링 | 인라인 스타일 | Tailwind CSS, CSS Modules |
-| 테스트 | 수동 테스트 | Jest, React Testing Library |
-| 인증 | 없음 | OAuth, JWT (B5-3에서 배움) |
+| 테스트 | Vitest/Testing Library 20개 + Playwright 2개 | CI 자동 실행과 더 많은 실패 경로 |
+| 인증 | Supabase 이메일 Auth + 보호 라우트 | 사용자별 RLS와 OAuth |
 
 ---
 
