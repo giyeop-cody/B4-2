@@ -1,8 +1,20 @@
 import { test, expect } from '@playwright/test'
 
-test.skip(!process.env.PLAYWRIGHT_PRODUCTION, '배포 원격 CRUD를 요청한 경우에만 실행')
+const authEmail = process.env.PLAYWRIGHT_AUTH_EMAIL
+const authPassword = process.env.PLAYWRIGHT_AUTH_PASSWORD
 
-test('Vercel 화면에서 Supabase 원격 CRUD가 동작한다', async ({ page }) => {
+test.skip(
+  !process.env.PLAYWRIGHT_PRODUCTION || !authEmail || !authPassword,
+  '확인된 평가용 로그인 계정이 있을 때만 원격 쓰기를 실행',
+)
+
+test('로그인 뒤 Vercel 화면에서 Supabase 원격 CRUD가 동작한다', async ({ page }) => {
+  await page.goto('/#/login?redirect=%2Fitems')
+  await page.getByLabel('이메일').fill(authEmail)
+  await page.getByLabel('비밀번호').fill(authPassword)
+  await page.getByRole('button', { name: '로그인' }).click()
+  await expect(page).toHaveURL(/#\/items$/)
+
   const title = `배포 검사 ${Date.now()}`
   const changedTitle = `${title} 수정`
   let createdId = null
