@@ -38,4 +38,10 @@ describe('ItemForm', () => {
 
     expect(screen.getByRole('button', { name: '저장 중…' })).toBeDisabled()
   })
+
+  it('원격 저장 실패 메시지를 폼 안에 보여준다', () => {
+    render(<ItemForm onSubmit={vi.fn()} submitting={false} submitError="저장 권한이 없습니다" />)
+
+    expect(screen.getByText('저장 권한이 없습니다')).toBeInTheDocument()
+  })
 })
