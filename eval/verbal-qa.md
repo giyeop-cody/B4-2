@@ -58,4 +58,4 @@ Supabase 이메일 로그인/가입과 `/profile` 보호 라우트입니다. CRU
 
 ## Q15. 무엇으로 검증했나요?
 
-Vitest/Testing Library 20개, Playwright 2개, 제품 빌드, npm audit, 실제 Supabase 생성·조회·수정·삭제 스크립트로 검사했습니다. 각 트러블은 docs/issues에 남겼습니다.
+Vitest/Testing Library 23개, Playwright 2개, 제품 빌드, npm audit, 실제 Supabase 생성·조회·수정·삭제 스크립트로 검사했습니다. 인증 이메일 redirect는 코드 테스트를 통과했고 Dashboard·실제 메일 확인이 남았습니다. 각 트러블은 docs/issues에 남겼습니다.
