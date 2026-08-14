@@ -36,4 +36,5 @@ Node.js 20에서 사용할 수 있는 jsdom 26을 설치할 때 하위 패키지
 - 보호 라우트와 로그인 폼 테스트를 더해 단위/컴포넌트 테스트 20개 통과
 - Playwright로 등록→상세→수정→삭제 및 필터·보호 라우트·404, 총 2개 통과
 - `verify-remote-crud.mjs`로 실제 Supabase 네 단계 통과
+- Vercel 배포 화면에서도 Supabase 원격 등록→상세→수정→삭제 1개 통과
 - Vitest와 Playwright가 같은 spec 파일을 읽던 충돌은 이슈 #17에서 검색 범위를 분리해 해결
