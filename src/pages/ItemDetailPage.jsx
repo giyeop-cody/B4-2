@@ -18,6 +18,7 @@ export default function ItemDetailPage() {
     clearMutationError,
   } = useItem(id)
   const [confirmOpen, setConfirmOpen] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const openDeleteDialog = () => {
     clearMutationError()
@@ -25,8 +26,9 @@ export default function ItemDetailPage() {
   }
 
   const handleDelete = async () => {
+    setDeleting(true)
     const ok = await deleteItem()
-    setConfirmOpen(false)
+    setDeleting(false)
     if (ok) navigate('/items')
   }
 
@@ -51,7 +53,14 @@ export default function ItemDetailPage() {
           </div>
         )}
       </StateView>
-      <ConfirmDialog open={confirmOpen} message="정말 삭제하시겠습니까?" onConfirm={handleDelete} onCancel={() => setConfirmOpen(false)} />
+      <ConfirmDialog
+        open={confirmOpen}
+        message="정말 삭제하시겠습니까?"
+        busy={deleting}
+        error={mutationError}
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmOpen(false)}
+      />
     </div>
   )
 }
