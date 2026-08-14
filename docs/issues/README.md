@@ -18,7 +18,7 @@
 | #17 | Vitest가 Playwright E2E 파일까지 실행함 | 중간 | 해결 | 테스트 도구별 검색 폴더 분리 |
 | #18 | Vite가 Arena 미리보기 호스트를 403으로 차단 | 낮음 | 해결 | `.e2b.app` 개발 호스트만 허용 |
 | #19 | 같은 등록 기능이 여러 UI에 중복됨 | 중간 | 해결 | 목록의 `+ 새 아이템 등록` 하나만 유지 |
-| #20 | 인증 이메일 확인 주소가 localhost로 생성됨 | 높음 | 부분 해결 | 코드 redirect 수정, Supabase Dashboard URL 확인 필요 |
+| #20 | 인증 이메일 확인 주소가 localhost로 생성됨 | 높음 | 해결 | 코드·Dashboard URL·실제 새 인증 이메일 Production 복귀 확인 |
 | #22 | Auth가 아이템 쓰기 권한과 분리됨 | 높음 | 해결 | 공개 조회·로그인 쓰기, RLS·배포·실계정 검증 완료 |
 
 #21은 GitHub Pull Request 번호이므로 다음 변경 이슈는 #22를 사용했다. 원격 [GitHub Issue #22](https://github.com/giyeop-cody/B4-2/issues/22)와 [ISSUE-022](ISSUE-022-authenticated-item-writes.md)가 대응한다.
