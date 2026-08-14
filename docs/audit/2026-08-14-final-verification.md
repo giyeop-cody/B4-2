@@ -45,8 +45,9 @@
 | 전역 상태 보너스 | 통과 | AuthContext |
 | 성능 보너스 | 통과 | useMemo/useCallback/React.memo |
 | 인증 보너스 | 통과 | Supabase Auth + 보호 profile |
-| learning/eval 브랜치 | 진행 중 | learning 완료, eval 최종 평가 정리 전 |
-| 실제 외부 동료평가 | 대기 | eval 요청서에 서명/의견 필요 |
+| learning/eval 브랜치 | 통과 | 두 브랜치와 문제별 브랜치 원격 push 확인 |
+| 학습 동료 페르소나 평가 | 통과 | eval/persona-peer-review.md |
+| 실제 외부 동료평가 | 대기 | eval 요청서에 실제 평가자 서명/의견 필요 |
 
 ## 배포 후 마지막 확인
 
