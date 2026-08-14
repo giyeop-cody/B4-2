@@ -26,9 +26,10 @@ React 18, React Router 7, Supabase로 만든 아이템 CRUD SPA다. LocalStorage
 - 페이지 7개, 재사용 컴포넌트 11개, 커스텀 훅 3개
 - 전역 사용자 상태(Context)
 - `useMemo`, `useCallback`, `React.memo` 성능 학습
-- Supabase 이메일 인증과 `/profile` 보호 라우트
-- Vitest/Testing Library 테스트 23개
-- Playwright 로컬 브라우저 흐름 2개 + Vercel 원격 CRUD 1개
+- Supabase 이메일 인증과 등록·수정·프로필 보호 라우트
+- 공개 목록·상세 조회, 로그인 사용자 등록·수정·삭제
+- Vitest/Testing Library 테스트 28개
+- Playwright 로컬 브라우저 흐름 2개 + 배포 익명 권한 검사
 - 실제 Supabase CRUD 실증 검사 스크립트
 
 ## 기술 스택
@@ -86,7 +87,7 @@ npm run dev
 ## 검사 명령
 
 ```bash
-# 단위/컴포넌트 테스트 23개
+# 단위/컴포넌트 테스트 28개
 npm test
 
 # 로컬 학습 모드 브라우저 테스트 2개
@@ -94,18 +95,21 @@ npx playwright install chromium
 npx playwright install-deps chromium  # Linux에서 필요한 경우
 npm run test:e2e
 
-# 배포 사이트의 Supabase 원격 UI CRUD 1개
+# 배포 사이트에서 비로그인 조회와 쓰기 UI 차단 검사
 npm run test:e2e:production
+
+# 확인된 평가용 로그인 계정이 있을 때만 배포 UI CRUD 검사
+PLAYWRIGHT_AUTH_EMAIL='...' PLAYWRIGHT_AUTH_PASSWORD='...' npm run test:e2e:production:write
 
 # 제품 빌드와 의존성 보안
 npm run build
 npm audit --omit=dev
 ```
 
-원격 CRUD 검사는 환경변수를 전달한 환경에서 실행한다. 검사 행은 끝에 삭제된다.
+원격 API CRUD는 로그인 세션으로만 검사한다. 검사 행은 끝에 삭제되며 계정 값은 문서나 Git에 저장하지 않는다.
 
 ```bash
-npm run verify:remote
+VERIFY_AUTH_EMAIL='...' VERIFY_AUTH_PASSWORD='...' npm run verify:remote
 ```
 
 ## 라우트
@@ -115,11 +119,11 @@ HashRouter를 사용하므로 배포 주소의 경로는 `/#/...` 뒤에 표시�
 | # | 라우트 | 화면/기능 |
 |---:|---|---|
 | 1 | `/` | 목록(index) |
-| 2 | `/items` | 목록, 카테고리 필터, 삭제 |
-| 3 | `/items/new` | 등록 폼 |
-| 4 | `/items/:id` | 상세, 삭제 |
-| 5 | `/items/:id/edit` | 수정 폼 |
-| 6 | `/login` | Supabase 로그인/회원가입 |
+| 2 | `/items` | 공개 목록·카테고리 필터, 로그인 사용자만 쓰기 메뉴 |
+| 3 | `/items/new` | 로그인 사용자 등록 폼(보호) |
+| 4 | `/items/:id` | 공개 상세, 로그인 사용자만 수정·삭제 |
+| 5 | `/items/:id/edit` | 로그인 사용자 수정 폼(보호) |
+| 6 | `/login` | Supabase 로그인/회원가입, 원래 경로 복귀 |
 | 7 | `/profile` | 로그인 사용자 보호 화면 |
 | 8 | `*` | 404 Not Found |
 
@@ -159,6 +163,7 @@ src/
 │   ├── api.js
 │   ├── dataSource.js
 │   ├── localDB.js
+│   ├── permissions.js        # 조회·쓰기 권한 판단
 │   └── supabaseClient.js
 ├── test/setup.js
 ├── App.jsx
@@ -236,7 +241,9 @@ create table public.items (
 );
 ```
 
-현재 과제 배포는 로그인 없이 필수 CRUD를 시연할 수 있는 공개 데모 정책을 사용한다. 운영 서비스에는 적합하지 않으며 사용자별 권한 RLS를 별도로 설계해야 한다.
+목표 권한은 **누구나 SELECT, 로그인한 `authenticated` 사용자만 INSERT/UPDATE/DELETE**다. `supabase/policies-authenticated-writes.sql`을 Supabase Dashboard의 SQL Editor에서 실행하면 기존 공개 쓰기 정책을 제거하고 목표 정책을 만든다. PostgreSQL 정책은 허용 정책끼리 OR로 결합되므로 기존 공개 쓰기 정책을 남겨두면 로그인 제한이 되지 않는다.
+
+SQL 파일을 Git에 추가한 것과 실제 원격 데이터베이스에 적용한 것은 다르다. Dashboard 실행과 결과 확인은 프로젝트 권한이 있는 사람이 해야 하며, 확인 전에는 적용 완료로 기록하지 않는다. 이번 과제는 작성자별 소유권까지 추가하지 않아 로그인 사용자는 모든 아이템을 수정·삭제할 수 있다.
 
 ### 연동 중 배운 점
 
@@ -247,7 +254,7 @@ create table public.items (
 
 ## 인증 보너스의 범위
 
-Supabase 이메일 로그인/가입과 전역 사용자 Context를 구현했다. `/profile`은 보호 라우트다. 2026-08-14 공개 Auth 설정 검사에서 이메일 제공자와 회원가입이 활성화됐고, 가입 뒤 이메일 확인이 필요한 상태임을 확인했다.
+Supabase 이메일 로그인/가입과 전역 사용자 Context를 구현했다. 원격 모드에서 `/items/new`, `/items/:id/edit`, `/profile`은 보호 라우트다. 비로그인 사용자는 목록·상세를 조회할 수 있지만 등록 CTA를 누르면 로그인으로 이동하고 수정·삭제 메뉴는 보이지 않는다. 명시적으로 켠 LocalStorage 학습 모드는 Supabase 계정 없이 CRUD 흐름을 연습할 수 있다. 2026-08-14 공개 Auth 설정 검사에서 이메일 제공자와 회원가입이 활성화됐고, 가입 뒤 이메일 확인이 필요한 상태임을 확인했다.
 
 회원가입 요청은 `VITE_APP_URL`을 `emailRedirectTo`로 전달한다. 값이 없으면 현재 브라우저 Origin을 사용한다. Supabase가 인증 토큰을 URL hash에 붙일 수 있고 앱도 HashRouter를 사용하므로 `/#/login` 경로는 넣지 않고 `https://b4-2.vercel.app` Origin만 사용한다.
 
@@ -257,7 +264,7 @@ Supabase Dashboard에서도 다음 값을 확인해야 한다.
 2. `Redirect URLs`: `https://b4-2.vercel.app/**` 허용
 3. 로컬 인증 메일을 시험할 때만 `http://localhost:5173/**` 추가
 
-코드의 `emailRedirectTo`가 허용 목록에 없으면 Supabase가 Dashboard의 Site URL로 돌아갈 수 있다. 프론트엔드 보호 라우트는 주소의 화면을 가리는 기능이며, 데이터 자체를 보호하려면 사용자와 연결된 RLS가 추가로 필요하다.
+코드의 `emailRedirectTo`가 허용 목록에 없으면 Supabase가 Dashboard의 Site URL로 돌아갈 수 있다. 프론트엔드 UI·보호 라우트·API 세션 검사는 실수와 정상 화면 접근을 막는 여러 겹의 방어다. 개발자 도구나 직접 HTTP 요청까지 막는 최종 데이터 권한은 위 RLS를 실제 원격 DB에 적용해야 생긴다.
 
 ## 성능 보너스의 범위
 
@@ -276,7 +283,15 @@ Vercel 프로젝트에 다음 환경변수를 등록한다.
 - `VITE_APP_URL=https://b4-2.vercel.app`
 - `VITE_ALLOW_LOCAL_DB=false`
 
-그 뒤 main 브랜치를 배포하고 `/#/items`에서 목록·상세·등록·수정·삭제를 다시 검사한다.
+배포 순서는 다음과 같다.
+
+1. `supabase/policies-authenticated-writes.sql`의 위험 범위와 기존 정책 이름을 확인한 뒤 Dashboard SQL Editor에서 실행한다.
+2. 정책 조회 SQL 결과와 익명 SELECT 성공·익명 mutation 거절을 확인한다.
+3. main 브랜치를 Vercel에 배포한다.
+4. `/#/items`에서 익명 목록·상세, 등록 CTA의 로그인 이동, 수정·삭제 비노출을 검사한다.
+5. 확인된 평가용 계정이 있을 때 로그인 등록·수정·삭제와 프로필·로그아웃을 검사한다.
+
+Dashboard RLS 적용, 실제 인증 이메일 복귀, 로그인 쓰기 검사는 외부 권한·계정이 필요한 작업이므로 실행 결과가 있을 때만 완료로 기록한다.
 
 ## 보안
 
