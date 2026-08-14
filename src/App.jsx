@@ -16,9 +16,9 @@ export default function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<ItemListPage />} />
           <Route path="items" element={<ItemListPage />} />
-          <Route path="items/new" element={<ItemNewPage />} />
+          <Route path="items/new" element={<ProtectedRoute allowLocalMode><ItemNewPage /></ProtectedRoute>} />
           <Route path="items/:id" element={<ItemDetailPage />} />
-          <Route path="items/:id/edit" element={<ItemEditPage />} />
+          <Route path="items/:id/edit" element={<ProtectedRoute allowLocalMode><ItemEditPage /></ProtectedRoute>} />
           <Route path="login" element={<LoginPage />} />
           <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="*" element={<NotFoundPage />} />
