@@ -1,38 +1,47 @@
-# B4-2 동료평가 시나리오
+# B4-2 동료평가 시연 순서
 
-## 1. 학습
-- 컴포넌트 (화면의 조각, JSX 반환)
-- props vs state (부모→자식 vs 내부 데이터)
-- useEffect (화면 그려진 후 실행)
-- 라우팅 (HashRouter, 6개 라우트)
-- 4상태 (StateView 통합)
+## 먼저 보여줄 자료
 
-## 2. 고찰
-- "상태를 어디에 둘지" → 상향 배치 (useItems 훅이 소유)
-- "언제 리렌더링" → state 바뀌면 해당 컴포넌트+자식
+1. `LEARNING.md`: 처음 배운 개념과 과거 시행착오
+2. `git log --graph --all`: learning, eval, 문제별 브랜치와 작은 커밋
+3. `docs/issues/README.md`: #6~#18 문제와 해결
+4. `docs/audit/2026-08-14-final-verification.md`: 자동/원격 검사 결과
+5. 배포 URL: `https://b4-2.vercel.app/#/items`
 
-## 3. 시도
-- Vite 6 + React 18, pages/5개 + components/8개 + hooks/2개
-- HashRouter, Supabase + LocalStorage fallback
-- StateView 4상태 통합
+## 10분 시연
 
-## 4. 수정
-- BrowserRouter → HashRouter (정적 호스팅)
-- children → Outlet (react-router-dom 6)
-- Supabase만 → LocalStorage fallback 추가
+1. 목록 로딩과 `Supabase 원격` 배지 확인
+2. 카테고리 변경 → 목록 변경
+3. 빈 등록 제출 → 필수값 오류
+4. 정상 등록 → 생성된 상세로 이동
+5. 수정 → 버튼의 `저장 중…` → 상세 반영
+6. 삭제 → 접근 가능한 확인창 → 목록에서 사라짐
+7. 잘못된 주소 → 404
+8. `/profile` → 비로그인이면 로그인으로 이동
+9. 가입 뒤 이메일 확인 안내 설명
+10. 터미널에서 `npm test`, `npm run test:e2e`, `npm run build` 결과 확인
 
-## 5. 선택과 선정
-- HashRouter vs BrowserRouter: HashRouter (100% 동작)
-- Supabase vs Firebase: Supabase (PostgreSQL, SQL 재사용)
-- StateView 통합 vs 페이지별 if: 통합 (일관성)
+## 설명해야 할 핵심
 
-## 6. 트러블슈팅
-- "목록 보이는데 버튼 안 됨" → children→Outlet
-- Supabase 없을 때 크래시 → isSupabaseConfigured fallback
-- Vercel 자동 재배포 안 됨 → 수동 Redeploy
+- props: 부모가 자식에게 주는 읽기 전용 값
+- state: 컴포넌트/훅이 기억하고 setter로 바꾸는 값
+- useEffect: 처음 나타날 때와 의존성 값이 바뀔 때 외부 데이터 요청
+- 흐름: URL → 페이지 → 훅 상태 → 사용자 이벤트 → Supabase → state 변경 → 렌더링
+- 네 상태: 로딩/실패/빈/성공을 `StateView`에서 통일
+- 변경 상태: 조회 오류와 등록·수정·삭제 오류를 따로 관리
 
-## 7. 평가 예상 질문
-- 컴포넌트 쪼갠 기준? → 재사용성, 단일 책임
-- props vs state? → 부모 전달 vs 내부 관리
-- useEffect 실행 시점? → 화면 그려진 후, 의존성 배열
-- 전체 흐름? → 라우팅→컴포넌트→상태→이벤트→렌더링
+## 선택과 트레이드오프
+
+- HashRouter: 정적 배포 단순 / URL에 `#`
+- Supabase: PostgreSQL 학습 / 설정과 RLS 이해 필요
+- 명시적 LocalStorage: 오프라인 학습 가능 / 환경변수 하나 증가
+- Context: 작은 앱 전역 사용자에 충분 / 큰 앱은 리렌더 범위 주의
+- 메모이제이션: 같은 카드 렌더 생략 / 작은 목록은 비용이 더 클 수 있음
+- 공개 CRUD + 보호 profile: 필수 시연 쉬움 / 실제 데이터 보호는 RLS가 필요
+
+## 질문받으면 숨기지 않을 한계
+
+- 보호 라우트는 프론트 화면 보호이며 사용자별 RLS는 구현하지 않음
+- 성공한 실제 이메일 로그인 시연에는 확인 가능한 평가자 계정이 필요함
+- 반응형 디자인과 초점 가두기 완성형 dialog는 필수 범위 밖
+- 과거 구현 21개 파일이 한 커밋이었던 기록은 보존하고 이후부터 작은 커밋 규칙을 적용
