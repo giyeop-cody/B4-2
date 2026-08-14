@@ -58,7 +58,7 @@
 
 2026-08-14 최종 권한·증거 변경까지 main과 Vercel Production에 반영했다.
 
-- 최종 기록 기준 main: `100adca`
+- 최종 기록 기준 main: `0aee953`
 - GitHub Production deployment: `success`
 - 배포 첫 화면과 `/#/items`: HTTP 200
 - 배포 UI: `Supabase 원격` 배지 확인
