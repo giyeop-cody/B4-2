@@ -21,9 +21,9 @@ describe('ItemForm', () => {
     const onSubmit = vi.fn()
     render(<ItemForm onSubmit={onSubmit} submitting={false} />)
 
-    await user.type(screen.getByPlaceholderText('제목을 입력하세요'), '  테스트 제목  ')
-    await user.selectOptions(screen.getByRole('combobox'), '학습')
-    await user.type(screen.getByPlaceholderText('내용을 입력하세요'), '  테스트 내용  ')
+    await user.type(screen.getByLabelText(/^제목/), '  테스트 제목  ')
+    await user.selectOptions(screen.getByLabelText('카테고리'), '학습')
+    await user.type(screen.getByLabelText(/^내용/), '  테스트 내용  ')
     await user.click(screen.getByRole('button', { name: '저장' }))
 
     expect(onSubmit).toHaveBeenCalledWith({
