@@ -28,7 +28,7 @@ React 18, React Router 7, Supabase로 만든 아이템 CRUD SPA다. LocalStorage
 - `useMemo`, `useCallback`, `React.memo` 성능 학습
 - Supabase 이메일 인증과 `/profile` 보호 라우트
 - Vitest/Testing Library 테스트 20개
-- Playwright 브라우저 흐름 테스트 2개
+- Playwright 로컬 브라우저 흐름 2개 + Vercel 원격 CRUD 1개
 - 실제 Supabase CRUD 실증 검사 스크립트
 
 ## 기술 스택
@@ -88,10 +88,13 @@ npm run dev
 # 단위/컴포넌트 테스트 20개
 npm test
 
-# 브라우저 테스트 2개
+# 로컬 학습 모드 브라우저 테스트 2개
 npx playwright install chromium
 npx playwright install-deps chromium  # Linux에서 필요한 경우
 npm run test:e2e
+
+# 배포 사이트의 Supabase 원격 UI CRUD 1개
+npm run test:e2e:production
 
 # 제품 빌드와 의존성 보안
 npm run build
