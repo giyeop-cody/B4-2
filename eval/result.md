@@ -7,7 +7,7 @@
 - 현재 소스: 필수 15항목 근거와 보너스 3항목 구현
 - 자동 검사: 단위/컴포넌트 23개, 로컬 브라우저 2개, 빌드 통과, 취약점 0개
 - 실제 Supabase: API CRUD와 Vercel 화면 CRUD 모두 통과
-- 배포 확인: main `cda6ee1`, HTTP 200, 새 번들 및 `Supabase 원격` 배지
+- 배포 확인: main `3899a33`, HTTP 200, 새 번들 및 `Supabase 원격` 배지
 - 추가: AuthContext, 로그인/가입, 보호 profile, useMemo/useCallback/React.memo
 - 학습 동료 페르소나 검토: 필수 15/15 근거 확인
 - 인증 이메일 localhost 이슈 #20: 코드 수정 PR 반영, Dashboard URL과 실제 메일 재확인 대기
