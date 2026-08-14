@@ -6,6 +6,9 @@ import ItemCard from '../components/ItemCard'
 import ConfirmDialog from '../components/ConfirmDialog'
 import ErrorBanner from '../components/ErrorBanner'
 import CategoryFilter from '../components/CategoryFilter'
+import { useAuth } from '../hooks/useAuth'
+import { isLocalMode } from '../lib/supabaseClient'
+import { canWriteItems } from '../lib/permissions'
 
 export default function ItemListPage() {
   const {
@@ -17,6 +20,8 @@ export default function ItemListPage() {
     deleteItem,
     clearMutationError,
   } = useItems()
+  const { user } = useAuth()
+  const canWrite = canWriteItems(user, isLocalMode)
   const [category, setCategory] = useState('전체')
   const [confirmId, setConfirmId] = useState(null)
   const [deleting, setDeleting] = useState(false)
@@ -55,7 +60,9 @@ export default function ItemListPage() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <h1 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>아이템 목록</h1>
-        <Link to="/items/new" style={{ padding: '8px 16px', background: '#3b82f6', color: '#fff', borderRadius: 6, textDecoration: 'none', fontSize: 14, fontWeight: 600 }}>+ 새 아이템 등록</Link>
+        <Link to="/items/new" style={{ padding: '8px 16px', background: '#3b82f6', color: '#fff', borderRadius: 6, textDecoration: 'none', fontSize: 14, fontWeight: 600 }}>
+          {canWrite ? '+ 새 아이템 등록' : '로그인 후 등록'}
+        </Link>
       </div>
       <CategoryFilter value={category} onChange={setCategory} counts={categoryCounts} />
       {mutationError && <div style={{ marginBottom: 16 }}><ErrorBanner message={mutationError} /></div>}
@@ -68,7 +75,14 @@ export default function ItemListPage() {
       >
         {(data) => (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {data.map((item) => <ItemCard key={item.id} item={item} onDelete={openDeleteDialog} />)}
+            {data.map((item) => (
+              <ItemCard
+                key={item.id}
+                item={item}
+                canWrite={canWrite}
+                onDelete={openDeleteDialog}
+              />
+            ))}
           </div>
         )}
       </StateView>

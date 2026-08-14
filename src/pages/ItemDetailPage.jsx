@@ -4,10 +4,15 @@ import { useItem } from '../hooks/useItem'
 import StateView from '../components/StateView'
 import ConfirmDialog from '../components/ConfirmDialog'
 import ErrorBanner from '../components/ErrorBanner'
+import { useAuth } from '../hooks/useAuth'
+import { isLocalMode } from '../lib/supabaseClient'
+import { canWriteItems } from '../lib/permissions'
 
 export default function ItemDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { user } = useAuth()
+  const canWrite = canWriteItems(user, isLocalMode)
   const {
     item,
     loading,
@@ -46,10 +51,16 @@ export default function ItemDetailPage() {
               <span style={{ color: '#aaa', fontSize: 13 }}>{data.created_at ? new Date(data.created_at).toLocaleString('ko-KR') : ''}</span>
             </div>
             <p style={{ fontSize: 15, lineHeight: 1.7, color: '#444', whiteSpace: 'pre-wrap' }}>{data.content}</p>
-            <div style={{ display: 'flex', gap: 10, marginTop: 24, paddingTop: 16, borderTop: '1px solid #f0f0f0' }}>
-              <Link to={`/items/${data.id}/edit`} style={{ padding: '6px 16px', border: '1px solid #d1d5db', borderRadius: 5, background: '#fff', color: '#555', textDecoration: 'none', fontSize: 13 }}>수정</Link>
-              <button onClick={openDeleteDialog} style={{ padding: '6px 16px', border: '1px solid #fecaca', borderRadius: 5, background: '#fff', color: '#dc2626', cursor: 'pointer', fontSize: 13 }}>삭제</button>
-            </div>
+            {canWrite ? (
+              <div style={{ display: 'flex', gap: 10, marginTop: 24, paddingTop: 16, borderTop: '1px solid #f0f0f0' }}>
+                <Link to={`/items/${data.id}/edit`} style={{ padding: '6px 16px', border: '1px solid #d1d5db', borderRadius: 5, background: '#fff', color: '#555', textDecoration: 'none', fontSize: 13 }}>수정</Link>
+                <button onClick={openDeleteDialog} style={{ padding: '6px 16px', border: '1px solid #fecaca', borderRadius: 5, background: '#fff', color: '#dc2626', cursor: 'pointer', fontSize: 13 }}>삭제</button>
+              </div>
+            ) : (
+              <p style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid #f0f0f0', color: '#666', fontSize: 14 }}>
+                <Link to={`/login?redirect=${encodeURIComponent(`/items/${data.id}`)}`} style={{ color: '#2563eb' }}>로그인</Link>하면 수정과 삭제를 사용할 수 있습니다.
+              </p>
+            )}
           </div>
         )}
       </StateView>
