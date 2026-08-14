@@ -61,6 +61,7 @@ cp .env.example .env.local
 ```dotenv
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-publishable-or-anon-key
+VITE_APP_URL=https://b4-2.vercel.app
 VITE_ALLOW_LOCAL_DB=false
 ```
 
@@ -85,7 +86,7 @@ npm run dev
 ## 검사 명령
 
 ```bash
-# 단위/컴포넌트 테스트 20개
+# 단위/컴포넌트 테스트 23개
 npm test
 
 # 로컬 학습 모드 브라우저 테스트 2개
@@ -248,7 +249,15 @@ create table public.items (
 
 Supabase 이메일 로그인/가입과 전역 사용자 Context를 구현했다. `/profile`은 보호 라우트다. 2026-08-14 공개 Auth 설정 검사에서 이메일 제공자와 회원가입이 활성화됐고, 가입 뒤 이메일 확인이 필요한 상태임을 확인했다.
 
-프론트엔드 보호 라우트는 주소의 화면을 가리는 기능이다. 데이터 자체를 보호하려면 사용자와 연결된 RLS가 추가로 필요하다.
+회원가입 요청은 `VITE_APP_URL`을 `emailRedirectTo`로 전달한다. 값이 없으면 현재 브라우저 Origin을 사용한다. Supabase가 인증 토큰을 URL hash에 붙일 수 있고 앱도 HashRouter를 사용하므로 `/#/login` 경로는 넣지 않고 `https://b4-2.vercel.app` Origin만 사용한다.
+
+Supabase Dashboard에서도 다음 값을 확인해야 한다.
+
+1. `Authentication → URL Configuration → Site URL`: `https://b4-2.vercel.app`
+2. `Redirect URLs`: `https://b4-2.vercel.app/**` 허용
+3. 로컬 인증 메일을 시험할 때만 `http://localhost:5173/**` 추가
+
+코드의 `emailRedirectTo`가 허용 목록에 없으면 Supabase가 Dashboard의 Site URL로 돌아갈 수 있다. 프론트엔드 보호 라우트는 주소의 화면을 가리는 기능이며, 데이터 자체를 보호하려면 사용자와 연결된 RLS가 추가로 필요하다.
 
 ## 성능 보너스의 범위
 
@@ -264,6 +273,7 @@ Vercel 프로젝트에 다음 환경변수를 등록한다.
 
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
+- `VITE_APP_URL=https://b4-2.vercel.app`
 - `VITE_ALLOW_LOCAL_DB=false`
 
 그 뒤 main 브랜치를 배포하고 `/#/items`에서 목록·상세·등록·수정·삭제를 다시 검사한다.
