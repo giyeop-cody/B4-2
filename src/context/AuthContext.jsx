@@ -15,12 +15,18 @@ export function AuthProvider({ children }) {
     }
 
     let active = true
-    supabase.auth.getSession().then(({ data, error }) => {
-      if (!active) return
-      if (error) setSessionError(error.message)
-      setUser(data.session?.user || null)
-      setLoading(false)
-    })
+    supabase.auth.getSession()
+      .then(({ data, error }) => {
+        if (!active) return
+        if (error) setSessionError(error.message)
+        setUser(data.session?.user || null)
+        setLoading(false)
+      })
+      .catch((requestError) => {
+        if (!active) return
+        setSessionError(requestError.message || '로그인 상태를 확인하지 못했습니다.')
+        setLoading(false)
+      })
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (active) setUser(session?.user || null)
@@ -53,6 +59,7 @@ export function AuthProvider({ children }) {
   const signOut = async () => {
     if (!supabase) return { error: new Error('Supabase 인증 설정이 없습니다.') }
     const { error } = await supabase.auth.signOut()
+    if (!error) setUser(null)
     return { error }
   }
 
