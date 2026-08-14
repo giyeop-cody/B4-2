@@ -1,6 +1,10 @@
 node_modules
 dist
+
+# 환경변수 파일은 모두 제외하고, 값이 없는 설명용 파일만 허용한다.
 .env
-.env.local
+.env.*
+!.env.example
+
 *.log
 .DS_Store
