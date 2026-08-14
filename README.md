@@ -302,6 +302,16 @@ Vercel 프로젝트에 다음 환경변수를 등록한다.
 - `npm audit --omit=dev` 결과: 취약점 0개(2026-08-14 검사).
 - 공개된 GitHub 토큰과 웹 세션은 즉시 폐기·재발급해야 한다.
 
+## Git 작성자 기록
+
+저장소 commit 작성자는 `giyeop-cody <cody.giyeop@gmail.com>`으로 통일했다. 2026-08-14 기존 이메일 때문에 Contributors가 둘로 나뉜 문제를 전체 history rewrite로 수정했다.
+
+- [이슈 #27 기록](docs/issues/ISSUE-027-git-email-history-rewrite.md)
+- [old→new commit SHA map](docs/history/2026-08-14-email-rewrite-commit-map.tsv)
+- [브랜치 ref map](docs/history/2026-08-14-email-rewrite-branch-map.tsv)
+
+기존 clone은 서로 다른 history이므로 새로 clone하는 것이 가장 안전하다.
+
 ## 학습·이슈·평가 기록
 
 - [LEARNING.md](LEARNING.md): 기초 학습과 과거 진행 기록
