@@ -12,7 +12,6 @@ export default function Layout() {
         <nav style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <DataSourceBadge />
           <Link to="/items" style={{ color: '#555', textDecoration: 'none', fontSize: 14, fontWeight: 500, padding: '6px 12px', borderRadius: 6 }}>목록</Link>
-          <Link to="/items/new" style={{ color: '#555', textDecoration: 'none', fontSize: 14, fontWeight: 500, padding: '6px 12px', borderRadius: 6 }}>등록</Link>
           <Link to={user ? '/profile' : '/login'} style={{ color: '#555', textDecoration: 'none', fontSize: 14, fontWeight: 500, padding: '6px 12px', borderRadius: 6 }}>
             {loading ? '확인 중…' : user ? '프로필' : '로그인'}
           </Link>
