@@ -20,6 +20,7 @@
 | #19 | 같은 등록 기능이 여러 UI에 중복됨 | 중간 | 해결 | 목록의 `+ 새 아이템 등록` 하나만 유지 |
 | #20 | 인증 이메일 확인 주소가 localhost로 생성됨 | 높음 | 해결 | 코드·Dashboard URL·실제 새 인증 이메일 Production 복귀 확인 |
 | #22 | Auth가 아이템 쓰기 권한과 분리됨 | 높음 | 해결 | 공개 조회·로그인 쓰기, RLS·배포·실계정 검증 완료 |
+| #27 | commit 이메일이 두 GitHub Contributor로 분리됨 | 높음 | 진행 중 | 전체 history rewrite·SHA mapping·강제 push |
 
 #21은 GitHub Pull Request 번호이므로 다음 변경 이슈는 #22를 사용했다. 원격 [GitHub Issue #22](https://github.com/giyeop-cody/B4-2/issues/22)와 [ISSUE-022](ISSUE-022-authenticated-item-writes.md)가 대응한다.
 
