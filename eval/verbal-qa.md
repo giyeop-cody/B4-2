@@ -54,8 +54,8 @@ AuthContext가 user/loading/sessionError와 로그인·가입·로그아웃 함�
 
 ## Q14. 인증과 보호 범위는 어디까지인가요?
 
-Supabase 이메일 로그인/가입과 `/profile` 보호 라우트입니다. CRUD는 필수 시연을 위해 공개입니다. 화면 보호만으로 DB가 보호되지는 않으며 실제 서비스는 사용자별 RLS가 필요합니다.
+Supabase 이메일 로그인/가입을 구현했습니다. 목록·상세는 공개하고 등록·수정·삭제는 로그인 사용자만 할 수 있습니다. `/items/new`, `/items/:id/edit`, `/profile`은 보호 라우트이며, 최종 데이터 권한은 RLS로도 확인했습니다. 이번 범위에서는 작성자별 소유권을 추가하지 않았습니다.
 
 ## Q15. 무엇으로 검증했나요?
 
-Vitest/Testing Library 23개, Playwright 2개, 제품 빌드, npm audit, 실제 Supabase 생성·조회·수정·삭제 스크립트로 검사했습니다. 인증 이메일 redirect는 코드 테스트를 통과했고 Dashboard·실제 메일 확인이 남았습니다. 각 트러블은 docs/issues에 남겼습니다.
+Vitest/Testing Library 28개, 로컬 Playwright 2개, 배포 익명 E2E 1개, 제품 빌드, npm audit로 검사했습니다. RLS는 익명 조회 200과 쓰기 3종 401, 로그인 사용자의 실제 CRUD로 확인했습니다. 인증 이메일 redirect는 코드·Dashboard URL·실제 새 이메일 Production 복귀까지 확인했습니다. 각 트러블은 docs/issues에 남겼습니다.

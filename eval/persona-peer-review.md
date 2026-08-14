@@ -8,8 +8,8 @@
 
 - learning 브랜치 커밋 그래프
 - README와 LEARNING
-- #6~#20 이슈 문서
-- 단위 테스트 23개, E2E 2개, 원격 CRUD 결과
+- #6~#20과 #22 이슈 문서
+- 단위 테스트 28개, 로컬 E2E 2개, 배포 익명 E2E 1개, 원격 권한 결과
 - 보너스 구현 코드
 
 ## 잘된 점
@@ -40,7 +40,7 @@
 
 ## 배포 재확인 뒤 페르소나 평가
 
-Vercel Production이 main `cda6ee1`을 배포한 뒤 실제 화면에서 `Supabase 원격` 배지와 등록→상세→수정→삭제를 다시 확인했다.
+Vercel Production이 최종 main 변경을 배포한 뒤 실제 화면에서 익명 조회·쓰기 비노출과 로그인 등록→상세→수정→삭제를 다시 확인했다. Dashboard URL과 실제 새 인증 이메일의 Production 복귀도 확인했다.
 
 | 평가 묶음 | 결과 | 근거 |
 |---|---:|---|
@@ -49,9 +49,9 @@ Vercel Production이 main `cda6ee1`을 배포한 뒤 실제 화면에서 `Supaba
 | React 이해 10~13 | 4/4 | README/LEARNING 설명과 상태 변화 예시 |
 | 통합 설명 14~15 | 2/2 | 전체 흐름과 Supabase 선택/트러블슈팅 |
 | 보너스 B1~B2 | 2/2 | AuthContext 전역 상태, 메모이제이션 |
-| 보너스 B3 | 조건부 | Auth/ProtectedRoute 코드는 확인. 인증 이메일 redirect는 PR 수정 후 Dashboard·실메일 확인 대기 |
+| 보너스 B3 | 통과 | Auth/ProtectedRoute, 로그인 쓰기 RLS, Dashboard URL, 실제 인증 이메일 복귀 확인 |
 
-**학습 동료 페르소나 현재 판단:** 필수 15/15 근거 확인. 인증 보너스는 이슈 #20의 실제 메일 재검증 뒤 최종 표시한다.
+**학습 동료 페르소나 현재 판단:** 필수 15/15와 보너스 3개 근거를 확인했다.
 
 이 점수는 학습을 돕는 페르소나 검토 결과이며 플랫폼 재평가 점수나 외부 사람의 실제 평가를 대신하지 않는다.
 외부 동료 3인의 직접 의견은 `external-peer-evaluation-form.md`에 받아야 한다.
