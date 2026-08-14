@@ -775,7 +775,7 @@ return <ActualContent />
 
 #### 🐛 발생한 문제
 
-GitHub에 push해도 Vercel이 자동으로 재배포하지 않음. Outlet 수정(커밋 21e9936)이 Vercel 배포에 반영되지 않음.
+GitHub에 push해도 Vercel이 자동으로 재배포하지 않음. Outlet 수정(커밋 0a8a22a)이 Vercel 배포에 반영되지 않음.
 
 #### 🔍 원인 분석
 
