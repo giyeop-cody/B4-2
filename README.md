@@ -1,6 +1,6 @@
 # B4-2: 버튼 누르면 화면이 스르륵 바뀌는 요즘 웹사이트 만들기
 
-> **배포 URL**: <https://b4-2.vercel.app/#/items>
+> **배포 URL**: <https://b4-2.vercel.app/items>
 >
 > **GitHub**: <https://github.com/giyeop-cody/B4-2>
 
@@ -114,7 +114,7 @@ VERIFY_AUTH_EMAIL='...' VERIFY_AUTH_PASSWORD='...' npm run verify:remote
 
 ## 라우트
 
-HashRouter를 사용하므로 배포 주소의 경로는 `/#/...` 뒤에 표시된다.
+BrowserRouter를 사용하므로 배포 주소의 경로는 `/#/...` 뒤에 표시된다.
 
 | # | 라우트 | 화면/기능 |
 |---:|---|---|
@@ -127,7 +127,7 @@ HashRouter를 사용하므로 배포 주소의 경로는 `/#/...` 뒤에 표시�
 | 7 | `/profile` | 로그인 사용자 보호 화면 |
 | 8 | `*` | 404 Not Found |
 
-`https://b4-2.vercel.app/items`가 아니라 `https://b4-2.vercel.app/#/items`가 정식 목록 주소다. HashRouter는 새로고침 서버 설정이 단순하지만 URL에 `#`이 생기는 단점이 있다.
+`https://b4-2.vercel.app/items`가 아니라 `https://b4-2.vercel.app/items`가 정식 목록 주소다. BrowserRouter는 URL에 `#`이 없고 Vercel rewrite 규칙으로 새로고침도 정상 동작한다.
 
 ## 프로젝트 구조
 
@@ -256,7 +256,7 @@ SQL 파일을 Git에 추가한 것과 실제 원격 데이터베이스에 적용
 
 Supabase 이메일 로그인/가입과 전역 사용자 Context를 구현했다. 원격 모드에서 `/items/new`, `/items/:id/edit`, `/profile`은 보호 라우트다. 비로그인 사용자는 목록·상세를 조회할 수 있지만 등록 CTA를 누르면 로그인으로 이동하고 수정·삭제 메뉴는 보이지 않는다. 명시적으로 켠 LocalStorage 학습 모드는 Supabase 계정 없이 CRUD 흐름을 연습할 수 있다. 2026-08-14 공개 Auth 설정 검사에서 이메일 제공자와 회원가입이 활성화됐고, 가입 뒤 이메일 확인이 필요한 상태임을 확인했다.
 
-회원가입 요청은 `VITE_APP_URL`을 `emailRedirectTo`로 전달한다. 값이 없으면 현재 브라우저 Origin을 사용한다. Supabase가 인증 토큰을 URL hash에 붙일 수 있고 앱도 HashRouter를 사용하므로 `/#/login` 경로는 넣지 않고 `https://b4-2.vercel.app` Origin만 사용한다.
+회원가입 요청은 `VITE_APP_URL`을 `emailRedirectTo`로 전달한다. 값이 없으면 현재 브라우저 Origin을 사용한다. Supabase가 인증 토큰을 URL hash에 붙일 수 있고 앱도 BrowserRouter를 사용하므로 `/#/login` 경로는 넣지 않고 `https://b4-2.vercel.app` Origin만 사용한다.
 
 2026-08-14 프로젝트 소유자가 Supabase Dashboard의 다음 값을 최종 확인했다.
 
@@ -307,7 +307,7 @@ Supabase 이메일 로그인/가입과 전역 사용자 Context를 구현했다.
 
 ### 준비
 
-1. <https://b4-2.vercel.app/#/items> 접속 — 로그아웃 상태에서 시작
+1. <https://b4-2.vercel.app/items> 접속 — 로그아웃 상태에서 시작
 2. F12 → **Network** 탭 → **Throttling** 드롭다운 위치 확인
 3. 매 시나리오 끝나면 새로고침
 

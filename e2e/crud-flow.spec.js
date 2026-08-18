@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/#/items')
+  await page.goto('/items')
   await page.evaluate(() => localStorage.clear())
   await page.reload()
   await expect(page.getByText('React 학습 노트')).toBeVisible()
