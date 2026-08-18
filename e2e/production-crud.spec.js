@@ -9,7 +9,7 @@ test.skip(
 )
 
 test('로그인 뒤 Vercel 화면에서 Supabase 원격 CRUD가 동작한다', async ({ page }) => {
-  await page.goto('/#/login?redirect=%2Fitems')
+  await page.goto('/login?redirect=%2Fitems')
   await page.getByLabel('이메일').fill(authEmail)
   await page.getByLabel('비밀번호').fill(authPassword)
   await page.getByRole('button', { name: '로그인' }).click()
@@ -20,7 +20,7 @@ test('로그인 뒤 Vercel 화면에서 Supabase 원격 CRUD가 동작한다', a
   let createdId = null
 
   try {
-    await page.goto('/#/items')
+    await page.goto('/items')
     await expect(page.getByText('Supabase 원격')).toBeVisible()
 
     await page.getByRole('link', { name: '+ 새 아이템 등록' }).click()
@@ -45,7 +45,7 @@ test('로그인 뒤 Vercel 화면에서 Supabase 원격 CRUD가 동작한다', a
     createdId = null
   } finally {
     if (createdId) {
-      await page.goto(`/#/items/${createdId}`)
+      await page.goto(`/items/${createdId}`)
       const deleteButton = page.getByRole('button', { name: '삭제', exact: true })
       if (await deleteButton.isVisible().catch(() => false)) {
         await deleteButton.click()
