@@ -276,6 +276,87 @@ Supabase 이메일 로그인/가입과 전역 사용자 Context를 구현했다.
 
 작은 목록에서는 메모 확인 비용이 더 클 수 있다. 실제 서비스에서는 React Profiler로 측정한 뒤 적용해야 한다.
 
+## 평가 항목 빠른 인덱스
+
+평가자가 README에서 출발해 평가표 15개 + 보너스 3개 항목을 빠르게 따라가도록 정리한 색인이다. 각 항목의 근거 코드와 문서를 한 행에서 바로 연다.
+
+| # | 평가 항목 | 근거 (코드) | 근거 (문서) |
+|---:|---|---|---|
+| 1 | 라우트 5개+ + Not Found | [`src/App.jsx`](src/App.jsx) |  |
+| 2 | CRUD 모두 동작 | [`src/lib/api.js`](src/lib/api.js), [`src/hooks/useItems.js`](src/hooks/useItems.js), [`src/hooks/useItem.js`](src/hooks/useItem.js) |  |
+| 3 | 공통 로딩/오류/빈 상태 | [`src/components/StateView.jsx`](src/components/StateView.jsx) |  |
+| 4 | 폼 검증/오류/제출 중 | [`src/components/ItemForm.jsx`](src/components/ItemForm.jsx) |  |
+| 5 | 배포 환경 CRUD + 환경변수 | §배포, [`.env.example`](.env.example) |  |
+| 6 | 커스텀 훅 + 분리 이유 | [`src/hooks/`](src/hooks/) | [LEARNING.md §6.5](LEARNING.md), [docs/reasoning-02-custom-hooks.md](docs/reasoning-02-custom-hooks.md) |
+| 7 | pages/components/hooks/lib 구조 |  | [docs/reasoning-01-architecture.md](docs/reasoning-01-architecture.md) |
+| 8 | 8개+ 재사용 컴포넌트 | [`src/components/`](src/components/) | [docs/reasoning-05-component-criteria.md](docs/reasoning-05-component-criteria.md) |
+| 9 | 공통 상태 UI 통일 | [`src/components/StateView.jsx`](src/components/StateView.jsx) | [docs/reasoning-05-component-criteria.md](docs/reasoning-05-component-criteria.md) |
+| 10 | props/state + 상태 위치 |  | [docs/reasoning-03-state-flow.md](docs/reasoning-03-state-flow.md) |
+| 11 | useEffect + 의존성 배열 | [`src/hooks/useItems.js`](src/hooks/useItems.js), [`src/hooks/useItem.js`](src/hooks/useItem.js) | [docs/reasoning-03-state-flow.md](docs/reasoning-03-state-flow.md) |
+| 12 | 비동기 4상태 처리 | [`src/components/StateView.jsx`](src/components/StateView.jsx) | [LEARNING.md §6.6](LEARNING.md), [docs/reasoning-02-custom-hooks.md](docs/reasoning-02-custom-hooks.md) |
+| 13 | 상태 → 화면 변화 3+ | [`src/pages/ItemListPage.jsx`](src/pages/ItemListPage.jsx), [`src/context/AuthContext.jsx`](src/context/AuthContext.jsx) | [docs/reasoning-03-state-flow.md](docs/reasoning-03-state-flow.md) |
+| 14 | 라우팅→렌더링 전체 흐름 |  | [docs/reasoning-06-full-flow.md](docs/reasoning-06-full-flow.md) |
+| 15 | Supabase 선택 + 어려움 | [`src/lib/api.js`](src/lib/api.js), [`src/lib/supabaseClient.js`](src/lib/supabaseClient.js) | §Supabase 선택과 설정, [docs/reasoning-04-supabase-dual-mode.md](docs/reasoning-04-supabase-dual-mode.md) |
+| B1 | 전역 상태 Context | [`src/context/AuthContext.jsx`](src/context/AuthContext.jsx), [`src/hooks/useAuth.js`](src/hooks/useAuth.js) | §인증 보너스의 범위 |
+| B2 | 성능 메모이제이션 | [`src/pages/ItemListPage.jsx`](src/pages/ItemListPage.jsx) | §성능 보너스의 범위 |
+| B3 | 인증 + 보호 라우트 | [`src/components/ProtectedRoute.jsx`](src/components/ProtectedRoute.jsx) | §인증 보너스의 범위 |
+
+## 로딩/오류/빈 상태를 개발자 도구로 테스트하는 법
+
+`StateView`의 4가지 분기(`loading / error / empty / 정상`)는 Chrome DevTools의 **Network** 탭으로 손쉽게 재현할 수 있다. 평가 시 이 순서대로 화면을 보여주면 항목 #3, #4, #9, #12가 한 번에 검증된다.
+
+### 준비
+
+1. <https://b4-2.vercel.app/#/items> 접속 — 로그아웃 상태에서 시작
+2. F12 → **Network** 탭 → **Throttling** 드롭다운 위치 확인
+3. 매 시나리오 끝나면 새로고침
+
+### 시나리오 1. 로딩 (`LoadingSpinner`)
+
+- Throttling: **Slow 3G**
+- 새로고침 → Supabase 응답 도착 전 짧은 시간 — 가운데 회전 애니메이션
+- 코드: [`StateView.jsx`](src/components/StateView.jsx)의 `if (loading) return <LoadingSpinner/>`
+
+### 시나리오 2. 빈 (`EmptyState`)
+
+- 정상 속도
+- 데이터가 없는 카테고리 필터 선택 (예: 일반 데이터만 있을 때 "백엔드")
+- 코드: [`StateView.jsx`](src/components/StateView.jsx)의 `if (!data || data.length === 0) return <EmptyState/>`
+- 메시지가 페이지 컨텍스트에 따라 동적으로 바뀜: `"표시할 데이터가 없습니다."` ↔ `"${category} 카테고리에 표시할 데이터가 없습니다."`
+
+### 시나리오 3. 오류 (`ErrorBanner` + 다시 시도)
+
+- Throttling: **Offline**
+- 새로고침 → Supabase 호출 실패 → 빨간 배너 + "다시 시도" 버튼
+- 이후 Throttling을 **Fast**로 → "다시 시도" 클릭 → 정상 복귀 (이 한 동작이 `onRetry={refetch}`의 증거)
+- 코드: [`useItems.js`](src/hooks/useItems.js)의 `catch (e) { setError(...) }` → `StateView` → `<ErrorBanner onRetry={refetch}/>`
+
+### 시나리오 4. 쓰기 오류 (`mutationError` 분리 확인)
+
+- 정상 로그인 → `/items/new`
+- F12 → **Application** 탭 → LocalStorage에서 Supabase 세션 키 값을 임의로 잘라 깨뜨린 뒤 저장
+- 제목/내용 채우고 저장 → 빨간 배너가 **폼 안에** 표시되고 폼은 그대로 살아있음 (목록이 빈 화면으로 안 바뀜 — 이게 read/write state 분리의 증거)
+- 코드: [`useItems.js`](src/hooks/useItems.js)의 `error`(read)와 `mutationError`(write)는 별도 state → [`ItemForm.jsx`](src/components/ItemForm.jsx)의 `<ErrorBanner submitError/>` 표시
+
+### 시나리오 5. 데이터 소스 배지
+
+- F12 → **Application** 탭 → LocalStorage 임의 키 추가/삭제 (또는 `.env.local` 변경)
+- 헤더의 [`DataSourceBadge`](src/components/DataSourceBadge.jsx)가 `Supabase 원격 / LocalStorage 학습 / 데이터 설정 필요`로 즉시 전환
+- 수동 fallback을 의도적으로 막아둔 정책의 증거
+
+### 시나리오 6. 비로그인 쓰기 차단 (4겹 방어 데모)
+
+- 로그아웃 후 `/items/new` 직접 주소 입력 → `/login?redirect=/items/new`로 리다이렉트 (라우트 단계)
+- 헤더 버튼이 "로그인 후 등록"으로 변화 (UI 단계)
+- 코드 단계: 비로그인 시 [`api.js`](src/lib/api.js)의 `requireWriteAccess()`가 `auth.getSession()`을 검사해 throw → "로그인이 필요한 기능입니다"
+- DB 단계: 정책 SQL로 익명 mutation 401 확보
+
+### 빠른 검사 명령
+
+- `npm test` — 28개 단위/컴포넌트 (상태 4분기 + 폼 검증 + 훅 분리 이유)
+- `npm run test:e2e` — 로컬 Playwright 2개 (CRUD + UI 회귀)
+- `npm run test:e2e:production` — 배포 익명 권한 (SELECT 200, mutation 4종 401)
+
 ## 배포
 
 Vercel 프로젝트에 다음 환경변수를 등록한다.
