@@ -48,10 +48,10 @@ test('필터, 보호 라우트, 잘못된 주소가 상태에 맞는 화면을 �
   await expect(page.getByText('React 학습 노트')).toBeVisible()
   await expect(page.getByText('Supabase 입문')).toHaveCount(0)
 
-  await page.goto('/#/profile')
+  await page.goto('/profile')
   await expect(page).toHaveURL(/#\/login\?redirect=%2Fprofile$/)
   await expect(page.getByText('Supabase 인증 설정이 없습니다. 환경변수를 확인하세요.')).toBeVisible()
 
-  await page.goto('/#/wrong-address')
+  await page.goto('/wrong-address')
   await expect(page.getByRole('heading', { name: '404' })).toBeVisible()
 })

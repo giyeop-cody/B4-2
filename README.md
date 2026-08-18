@@ -127,7 +127,7 @@ BrowserRouter를 사용하므로 배포 주소의 경로는 `/#/...` 뒤에 표�
 | 7 | `/profile` | 로그인 사용자 보호 화면 |
 | 8 | `*` | 404 Not Found |
 
-`https://b4-2.vercel.app/items`가 아니라 `https://b4-2.vercel.app/items`가 정식 목록 주소다. BrowserRouter는 URL에 `#`이 없고 Vercel rewrite 규칙으로 새로고침도 정상 동작한다.
+정식 목록 주소는 `https://b4-2.vercel.app/items`다. HashRouter 시절에는 `#/` 경로가 필요했지만 BrowserRouter 전환 후 불필요해졌다. BrowserRouter는 URL에 `#`이 없고 Vercel rewrite 규칙으로 새로고침도 정상 동작한다.
 
 ## 프로젝트 구조
 
